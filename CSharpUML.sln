@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpUML", "CSharpUML\CSharpUML.csproj", "{F76CEA6A-640B-429D-8DE3-F80226313903}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F76CEA6A-640B-429D-8DE3-F80226313903}.Debug|x86.ActiveCfg = Debug|x86
+		{F76CEA6A-640B-429D-8DE3-F80226313903}.Debug|x86.Build.0 = Debug|x86
+		{F76CEA6A-640B-429D-8DE3-F80226313903}.Release|x86.ActiveCfg = Release|x86
+		{F76CEA6A-640B-429D-8DE3-F80226313903}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = CSharpUML\CSharpUML.csproj
+	EndGlobalSection
+EndGlobal

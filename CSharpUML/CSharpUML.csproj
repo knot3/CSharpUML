@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F76CEA6A-640B-429D-8DE3-F80226313903}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>CSharpUML</RootNamespace>
+    <AssemblyName>CSharpUML</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Commandlineparameters>../..</Commandlineparameters>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="NDesk.Options">
+      <HintPath>lib\NDesk.Options.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Files.cs" />
+    <Compile Include="IUmlObject.cs" />
+    <Compile Include="CSharpParser.cs" />
+    <Compile Include="UmlEnum.cs" />
+    <Compile Include="UmlClass.cs" />
+    <Compile Include="Strings.cs" />
+    <Compile Include="UmlObject.cs" />
+    <Compile Include="UmlMethod.cs" />
+    <Compile Include="UmlAttribute.cs" />
+    <Compile Include="CSharpBlock.cs" />
+    <Compile Include="Block.cs" />
+    <Compile Include="UmlBlock.cs" />
+    <Compile Include="IParser.cs" />
+    <Compile Include="UmlParser.cs" />
+    <Compile Include="ClassDiagram.cs" />
+    <Compile Include="Inheritance.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>
