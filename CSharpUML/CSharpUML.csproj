@@ -57,6 +57,7 @@
     <Compile Include="UmlParser.cs" />
     <Compile Include="ClassDiagram.cs" />
     <Compile Include="Inheritance.cs" />
+    <Compile Include="GraphViz.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -116,10 +116,8 @@ namespace CSharpUML
 				string graphdir = path + "/graphs/";
 				ClassDiagram dia = new ClassDiagram (objects);
 				Files.WriteLines (graphdir + "classes.dot", dia.DotCode ());
-				Process.Start (new ProcessStartInfo (
-  				  "dot", "-Tsvg -o'" + graphdir + "classes.svg' '" + graphdir + "classes.dot'"
-				)
-				);
+				GraphViz.Dot("svg", graphdir + "classes.dot", graphdir + "classes.svg");
+				GraphViz.Dot("png", graphdir + "classes.dot", graphdir + "classes.png");
 			}
 		}
 	}
