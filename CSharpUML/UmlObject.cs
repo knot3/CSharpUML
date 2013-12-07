@@ -44,6 +44,24 @@ namespace CSharpUML
 		}
 
 		public abstract string ToUmlCode (int padding = 0);
+
+		public override bool Equals (object obj)
+		{
+			return Equals (obj as IUmlObject);
+		}
+
+		public bool Equals (IUmlObject obj)
+		{
+			if (obj == null)
+				return false;
+
+			return Name == obj.Name;
+		}
+ 
+		public override int GetHashCode ()
+		{
+			return Name.GetHashCode ();
+		}
 	}
 
 	public enum Publicity

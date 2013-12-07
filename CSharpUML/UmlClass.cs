@@ -127,10 +127,12 @@ namespace CSharpUML
 
 		public IEnumerable<IUmlObject> FindBaseClasses (IEnumerable<IUmlObject> _objects)
 		{
+			Console.WriteLine("FindBaseClasses:"+this.Name);
 			IUmlObject[] objects = _objects.ToArray ();
 			foreach (UmlClass obj in objects.OfType<UmlClass>()) {
 				if (this.IsBase (obj)) {
 					yield return obj;
+			Console.WriteLine("FindBaseClasses:"+this.Name+" => "+obj.Name);
 					foreach (UmlClass baseOfObj in obj.FindBaseClasses(objects)) {
 						yield return baseOfObj;
 					}
@@ -140,10 +142,12 @@ namespace CSharpUML
 
 		public IEnumerable<IUmlObject> FindDerivedClasses (IEnumerable<IUmlObject> _objects)
 		{
+			Console.WriteLine("FindDerivedClasses:"+this.Name);
 			IUmlObject[] objects = _objects.ToArray ();
 			foreach (UmlClass obj in objects.OfType<UmlClass>()) {
 				if (obj.IsBase (this)) {
 					yield return obj;
+			Console.WriteLine("FindDerivedClasses:"+this.Name+" => "+obj.Name);
 					foreach (UmlClass baseOfObj in obj.FindDerivedClasses(objects)) {
 						yield return baseOfObj;
 					}
@@ -153,6 +157,7 @@ namespace CSharpUML
 
 		public IEnumerable<IUmlObject> FindRelated (IEnumerable<IUmlObject> objects)
 		{
+			yield return this;
 			foreach (UmlClass obj in FindBaseClasses(objects)) {
 				yield return obj;
 			}

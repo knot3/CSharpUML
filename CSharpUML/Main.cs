@@ -89,7 +89,7 @@ namespace CSharpUML
 					IEnumerable<IUmlObject> objects = parser.Parse (filename);
 					List<string> lines = new List<string> ();
 					foreach (IUmlObject obj in objects) {
-						lines.Add (obj.ToUmlCode ());
+						lines.Add (obj.ToUmlCode () + "\n");
 					}
 					string genfile = filename.ReplaceFirst (path, path + "/gen/").Replace (".uml", ".cs")
 								.Replace ("/uml/", "/");
@@ -108,11 +108,13 @@ namespace CSharpUML
 
 				List<IUmlObject> allObjects = new List<IUmlObject> ();
 				Action<string> processFile = (filename) => {
-					IParser parser = new UmlParser ();
-					allObjects.AddRange (parser.Parse (filename));
-					//foreach (IUmlObject obj in objects) {
-					//	Console.WriteLine (obj);
-					//}
+					if (!filename.Contains ("graphs")) {
+						IParser parser = new UmlParser ();
+						allObjects.AddRange (parser.Parse (filename));
+						//foreach (IUmlObject obj in objects) {
+						//	Console.WriteLine (obj);
+						//}
+					}
 				};
 				Files.SearchFiles (path, new string[]{".uml"}, processFile);
 
@@ -124,10 +126,23 @@ namespace CSharpUML
 
 				foreach (UmlClass obj in allObjects.OfType<UmlClass>()) {
 					string filename = "class-" + obj.Name.Clean ();
-					ClassDiagram dia = new ClassDiagram (obj.FindRelated (allObjects).Concat (new[]{obj}));
 					Console.WriteLine ("Write: " + filename);
+					
+					Console.WriteLine ("allObjects=" + allObjects.Count ());
+					IEnumerable<IUmlObject> relatedObjects = obj.FindRelated (allObjects);
+					Console.WriteLine (relatedObjects.Count ());
+
+					// write class diagram
+					ClassDiagram dia = new ClassDiagram (relatedObjects);
 					Files.WriteLines (graphdir + filename + ".dot", dia.DotCode ());
-					GraphViz.Dot ("svg", graphdir + filename + ".dot", graphdir + filename + ".svg");
+					//GraphViz.Dot ("svg", graphdir + filename + ".dot", graphdir + filename + ".svg");
+
+					// write uml code
+					List<string> lines = new List<string> ();
+					foreach (IUmlObject relObj in relatedObjects) {
+						lines.Add (relObj.ToUmlCode () + "\n");
+					}
+					Files.WriteLines (graphdir + filename + ".uml", lines);
 				}
 			}
 		}

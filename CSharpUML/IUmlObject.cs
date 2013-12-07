@@ -5,7 +5,7 @@ using NDesk.Options;
 
 namespace CSharpUML
 {
-	public interface IUmlObject
+	public interface IUmlObject : IEquatable<IUmlObject>
 	{
 		string ToUmlCode(int padding = 0);
 		
