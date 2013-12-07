@@ -90,16 +90,6 @@ namespace CSharpUML
 			return line.Trim ().Length > 0;
 		}
 
-		private bool FilterMethods (string line)
-		{
-			int indexBracket = line.IndexOf ("(");
-			int indexEqualSign = line.IndexOf ("=");
-			if ((indexBracket != -1 && indexEqualSign == -1) || (indexBracket < indexEqualSign)) {
-				return true;
-			}
-			return false;
-		}
-
 		public IEnumerable<IUmlObject> Parse (string filename)
 		{
 			IEnumerable<IUmlObject> parsed = Parse (Files.ReadLines (filename).TrimAll ());

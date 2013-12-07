@@ -109,8 +109,17 @@ namespace CSharpUML
 				+ name
 				+ " : " + string.Join (", ", bases)
 			);
+			lines.Add (paddingStr + "  Attributes:");
 			foreach (IUmlObject obj in Content) {
-				lines.Add (obj.ToUmlCode (padding + 4));
+				if (obj is UmlAttribute) {
+					lines.Add (obj.ToUmlCode (padding + 4));
+				}
+			}
+			lines.Add (paddingStr + "  Methods:");
+			foreach (IUmlObject obj in Content) {
+				if (!(obj is UmlAttribute)) {
+					lines.Add (obj.ToUmlCode (padding + 4));
+				}
 			}
 			return string.Join ("\n", lines);
 		}

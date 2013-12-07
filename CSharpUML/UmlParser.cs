@@ -36,7 +36,7 @@ namespace CSharpUML
 					}
 					blocks.Add (block);
 				} else {
-					throw new InvalidOperationException ("This should never happen!");
+					throw new InvalidOperationException ("This should never happen! " + line);
 				}
 			}
 			return blocks.ToArray ();
@@ -46,7 +46,7 @@ namespace CSharpUML
 		{
 			if (lines.Count () > 0) {
 				int i = 0;
-				UmlBlock[] blocks = ParseBlocks (lines.ToArray (), ref i, -1);
+				UmlBlock[] blocks = ParseBlocks (lines.Where (FilterIgnoreLines).ToArray (), ref i, -1);
 
 				foreach (UmlBlock block in blocks) {
 					if (UmlClass.Matches (block)) {
@@ -56,6 +56,11 @@ namespace CSharpUML
 					}
 				}
 			}
+		}
+
+		private bool FilterIgnoreLines (string line)
+		{
+			return !(line.ToLower ().Contains ("attributes:") || line.ToLower ().Contains ("methods:"));
 		}
 
 		public IEnumerable<IUmlObject> Parse (string filename)

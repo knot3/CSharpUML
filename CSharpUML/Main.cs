@@ -110,6 +110,7 @@ namespace CSharpUML
 				Action<string> processFile = (filename) => {
 					if (!filename.Contains ("graphs")) {
 						IParser parser = new UmlParser ();
+						Console.WriteLine ("Read: " + filename);
 						allObjects.AddRange (parser.Parse (filename));
 						//foreach (IUmlObject obj in objects) {
 						//	Console.WriteLine (obj);
@@ -133,7 +134,7 @@ namespace CSharpUML
 					// write class diagram
 					ClassDiagram dia = new ClassDiagram (relatedObjects);
 					Files.WriteLines (graphdir + filename + ".dot", dia.DotCode ());
-					//GraphViz.Dot ("svg", graphdir + filename + ".dot", graphdir + filename + ".svg");
+					GraphViz.Dot ("svg", graphdir + filename + ".dot", graphdir + filename + ".svg");
 
 					// write uml code
 					List<string> lines = new List<string> ();
