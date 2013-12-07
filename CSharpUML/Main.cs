@@ -128,9 +128,7 @@ namespace CSharpUML
 					string filename = "class-" + obj.Name.Clean ();
 					Console.WriteLine ("Write: " + filename);
 					
-					Console.WriteLine ("allObjects=" + allObjects.Count ());
 					IEnumerable<IUmlObject> relatedObjects = obj.FindRelated (allObjects);
-					Console.WriteLine (relatedObjects.Count ());
 
 					// write class diagram
 					ClassDiagram dia = new ClassDiagram (relatedObjects);
