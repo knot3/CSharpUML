@@ -69,7 +69,13 @@ namespace CSharpUML
 
 		public static bool Matches (UmlBlock block)
 		{
-			return block.Name.Contains (") :");
+			string line = block.Name;
+			int indexBracketOpen = line.IndexOf ("(");
+			int indexBracketClose = line.IndexOf (")");
+			if (indexBracketOpen != -1 && indexBracketClose != -1)
+				return true;
+			else 
+				return false;
 		}
 
 		public override string ToUmlCode (int padding = 0)

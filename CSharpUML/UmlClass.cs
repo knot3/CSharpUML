@@ -114,6 +114,53 @@ namespace CSharpUML
 			}
 			return string.Join ("\n", lines);
 		}
+
+		public bool IsBase (UmlClass obj)
+		{
+			foreach (string baseclass in bases) {
+				if (obj.Name.Clean () == baseclass.Clean ()) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public IEnumerable<IUmlObject> FindBaseClasses (IEnumerable<IUmlObject> _objects)
+		{
+			IUmlObject[] objects = _objects.ToArray ();
+			foreach (UmlClass obj in objects.OfType<UmlClass>()) {
+				if (this.IsBase (obj)) {
+					yield return obj;
+					foreach (UmlClass baseOfObj in obj.FindBaseClasses(objects)) {
+						yield return baseOfObj;
+					}
+				}
+			}
+		}
+
+		public IEnumerable<IUmlObject> FindDerivedClasses (IEnumerable<IUmlObject> _objects)
+		{
+			IUmlObject[] objects = _objects.ToArray ();
+			foreach (UmlClass obj in objects.OfType<UmlClass>()) {
+				if (obj.IsBase (this)) {
+					yield return obj;
+					foreach (UmlClass baseOfObj in obj.FindDerivedClasses(objects)) {
+						yield return baseOfObj;
+					}
+				}
+			}
+		}
+
+		public IEnumerable<IUmlObject> FindRelated (IEnumerable<IUmlObject> objects)
+		{
+			foreach (UmlClass obj in FindBaseClasses(objects)) {
+				yield return obj;
+			}
+			foreach (UmlClass obj in FindDerivedClasses(objects)) {
+				yield return obj;
+			}
+		}
+
 	}
 
 	public enum ClassType

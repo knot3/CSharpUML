@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 using NDesk.Options;
-using System.Diagnostics;
 
 namespace CSharpUML
 {
@@ -103,21 +104,31 @@ namespace CSharpUML
 		{
 			foreach (string path in paths) {
 				Console.WriteLine (path);
-				List<IUmlObject> objects = new List<IUmlObject> ();
+				string graphdir = path + "/graphs/";
+
+				List<IUmlObject> allObjects = new List<IUmlObject> ();
 				Action<string> processFile = (filename) => {
 					IParser parser = new UmlParser ();
-					objects.AddRange (parser.Parse (filename));
+					allObjects.AddRange (parser.Parse (filename));
 					//foreach (IUmlObject obj in objects) {
 					//	Console.WriteLine (obj);
 					//}
 				};
 				Files.SearchFiles (path, new string[]{".uml"}, processFile);
 
-				string graphdir = path + "/graphs/";
-				ClassDiagram dia = new ClassDiagram (objects);
-				Files.WriteLines (graphdir + "classes.dot", dia.DotCode ());
-				GraphViz.Dot("svg", graphdir + "classes.dot", graphdir + "classes.svg");
-				GraphViz.Dot("png", graphdir + "classes.dot", graphdir + "classes.png");
+				Console.WriteLine ("Write: " + "classes.dot");
+				ClassDiagram allDia = new ClassDiagram (allObjects);
+				Files.WriteLines (graphdir + "classes.dot", allDia.DotCode ());
+				GraphViz.Dot ("svg", graphdir + "classes.dot", graphdir + "classes.svg");
+				GraphViz.Dot ("png", graphdir + "classes.dot", graphdir + "classes.png");
+
+				foreach (UmlClass obj in allObjects.OfType<UmlClass>()) {
+					string filename = "class-" + obj.Name.Clean ();
+					ClassDiagram dia = new ClassDiagram (obj.FindRelated (allObjects).Concat (new[]{obj}));
+					Console.WriteLine ("Write: " + filename);
+					Files.WriteLines (graphdir + filename + ".dot", dia.DotCode ());
+					GraphViz.Dot ("svg", graphdir + filename + ".dot", graphdir + filename + ".svg");
+				}
 			}
 		}
 	}
