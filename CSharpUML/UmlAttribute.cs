@@ -13,7 +13,8 @@ namespace CSharpUML
 			name = name.Split ('=') [0].TrimAll ();
 
 			if (name.Contains (" ")) {
-				string[] p = name.Split (new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
+				string[] p = name.CleanGenerics ()
+					.Split (new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
 				type = p [0];
 				name = "";
 				for (int i = 0; i < p.Length; ++i) {
@@ -36,6 +37,13 @@ namespace CSharpUML
 		public static bool Matches (CSharpBlock block)
 		{
 			string line = block.Name;
+
+			// index operator?
+			if (line.Contains ("this [") && line.Contains ("]")) {
+				return false;
+			}
+
+			// normal method?
 			int indexBracketOpen = line.IndexOf ("(");
 			int indexBracketClose = line.IndexOf (")");
 			int indexEqualSign = line.IndexOf ("=");
@@ -51,6 +59,13 @@ namespace CSharpUML
 		public static bool Matches (UmlBlock block)
 		{
 			string line = block.Name;
+
+			// index operator?
+			if (line.Contains ("this [") && line.Contains ("]")) {
+				return false;
+			}
+
+			// normal method?
 			int indexBracketOpen = line.IndexOf ("(");
 			int indexBracketClose = line.IndexOf (")");
 			if (indexBracketOpen == -1 && indexBracketClose == -1) {

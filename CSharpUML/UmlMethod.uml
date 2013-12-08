@@ -5,6 +5,7 @@ public class UmlMethod : UmlObject
   Methods:
     + UmlMethod (CSharpBlock block)
     + UmlMethod (UmlBlock block)
+    - parseParams ()
     + Matches (CSharpBlock block) : bool static
     + Matches (UmlBlock block) : bool static
     + ToUmlCode (int padding = 0) : string override

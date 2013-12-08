@@ -11,13 +11,11 @@ namespace CSharpUML
 		public UmlMethod (CSharpBlock block)
 			: base(block)
 		{
-			int indexBracketOpen = name.IndexOf ("(");
-			int indexBracketClose = name.IndexOf (")");
-			string paramStr = name.Substring (indexBracketOpen + 1, indexBracketClose - indexBracketOpen - 1);
-			parameters = paramStr.Split (',').TrimAll ().ToArray ();
-			name = name.IfContains ("(" + paramStr + ")", () => {});
+			parseParams ();
+
 			if (name.Contains (" ")) {
-				string[] p = name.Split (new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
+				string[] p = name.CleanGenerics ()
+					.Split (new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
 				returntype = p [0];
 				name = "";
 				for (int i = 0; i < p.Length; ++i) {
@@ -36,11 +34,7 @@ namespace CSharpUML
 		public UmlMethod (UmlBlock block)
 			: base(block)
 		{
-			int indexBracketOpen = name.IndexOf ("(");
-			int indexBracketClose = name.IndexOf (")");
-			string paramStr = name.Substring (indexBracketOpen + 1, indexBracketClose - indexBracketOpen - 1);
-			parameters = paramStr.Split (',').TrimAll ().ToArray ();
-			name = name.IfContains ("(" + paramStr + ")", () => {});
+			parseParams ();
 
 			if (name.Contains (":")) {
 				string[] p = name.Split (":").TrimAll ().ToArray ();
@@ -51,9 +45,36 @@ namespace CSharpUML
 			}
 		}
 
+		private void parseParams ()
+		{
+			// index operator?
+			if (name.Contains ("this [") && name.Contains ("]")) {
+				int indexBracketOpen = name.IndexOf ("[");
+				int indexBracketClose = name.IndexOf ("]");
+				string paramStr = name.Substring (indexBracketOpen + 1, indexBracketClose - indexBracketOpen - 1);
+				parameters = paramStr.Split (',').TrimAll ().ToArray ();
+				name = name.IfContains ("[" + paramStr + "]", () => {});
+			}
+			// normal method?
+			else {
+				int indexBracketOpen = name.IndexOf ("(");
+				int indexBracketClose = name.IndexOf (")");
+				string paramStr = name.Substring (indexBracketOpen + 1, indexBracketClose - indexBracketOpen - 1);
+				parameters = paramStr.Split (',').TrimAll ().ToArray ();
+				name = name.IfContains ("(" + paramStr + ")", () => {});
+			}
+		}
+
 		public static bool Matches (CSharpBlock block)
 		{
 			string line = block.Name;
+
+			// index operator?
+			if (line.Contains ("this [") && line.Contains ("]")) {
+				return true;
+			}
+
+			// normal method?
 			int indexBracketOpen = line.IndexOf ("(");
 			int indexBracketClose = line.IndexOf (")");
 			int indexEqualSign = line.IndexOf ("=");
@@ -70,6 +91,13 @@ namespace CSharpUML
 		public static bool Matches (UmlBlock block)
 		{
 			string line = block.Name;
+
+			// index operator?
+			if (line.Contains ("this [") && line.Contains ("]")) {
+				return true;
+			}
+
+			// normal method?
 			int indexBracketOpen = line.IndexOf ("(");
 			int indexBracketClose = line.IndexOf (")");
 			if (indexBracketOpen != -1 && indexBracketClose != -1)

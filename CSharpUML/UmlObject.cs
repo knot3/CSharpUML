@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace CSharpUML
 {
@@ -129,6 +130,26 @@ namespace CSharpUML
 				return "";
 			}
 		}
+
+		public static string CleanGenerics (this string str)
+		{
+			var result = new StringBuilder (str.Length);
+			int inBrackets = 0;
+			for (int i = 0; i < str.Length; i++) {
+				if (str [i] == '<') {
+					++inBrackets;
+				} else if (str [i] == '>') {
+					--inBrackets;
+				}
+				if (inBrackets > 0 && str [i] == ' ') {
+					// ignore
+				} else {
+					result.Append (str [i]);
+				}
+			}
+			return result.ToString ();
+		}
+
 	}
 }
 
