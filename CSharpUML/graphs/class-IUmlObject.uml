@@ -1,0 +1,70 @@
+public interface IUmlObject : IEquatable<IUmlObject>
+  Attributes:
+    + Publicity : Publicity
+    + Virtuality : Virtuality
+    + Name : string
+  Methods:
+    + ToUmlCode (int padding = 0) : string
+
+public abstract class UmlObject : IUmlObject
+  Attributes:
+    # name : string
+    + Publicity : Publicity
+    + Virtuality : Virtuality
+    + Name : string
+  Methods:
+    +  (block.Name) : this  (CSharpBlock block)
+    +  (block.Name) : this  (UmlBlock block)
+
+public class UmlAttribute : UmlObject
+  Attributes:
+    + type : string
+  Methods:
+    + UmlAttribute  (CSharpBlock block)
+    + UmlAttribute  (UmlBlock block)
+    + Matches (CSharpBlock block) : bool static
+    + Matches (UmlBlock block) : bool static
+    + ToUmlCode (int padding = 0) : string override
+
+public class UmlClass : UmlObject
+  Attributes:
+    + type : ClassType
+    + bases : string[]
+    + Content : IUmlObject[]
+  Methods:
+    + UmlClass  (CSharpBlock block)
+    + UmlClass  (UmlBlock block)
+    + ParseContent (IEnumerable<CSharpBlock> blocks) : IEnumerable<IUmlObject>
+    + ParseContent (IEnumerable<UmlBlock> blocks) : IEnumerable<IUmlObject>
+    + Matches (CSharpBlock block) : bool static
+    + Matches (UmlBlock block) : bool static
+    + ToString () : string override
+    + ToUmlCode (int padding = 0) : string override
+    + IsBase (UmlClass obj) : bool
+    + FindBaseClasses (IEnumerable<IUmlObject> _objects) : IEnumerable<IUmlObject>
+    + FindDerivedClasses (IEnumerable<IUmlObject> _objects) : IEnumerable<IUmlObject>
+    + FindRelated (IEnumerable<IUmlObject> objects) : IEnumerable<IUmlObject>
+
+public class UmlEnum : UmlObject
+  Attributes:
+    - values : string[]
+  Methods:
+    + UmlEnum  (CSharpBlock block)
+    + UmlEnum  (UmlBlock block)
+    + ParseContent (IEnumerable<CSharpBlock> blocks) : IEnumerable<string>
+    + ParseContent (IEnumerable<UmlBlock> blocks) : IEnumerable<string>
+    + Matches (CSharpBlock block) : bool static
+    + Matches (UmlBlock block) : bool static
+    + ToUmlCode (int padding = 0) : string override
+
+public class UmlMethod : UmlObject
+  Attributes:
+    + parameters : string[]
+    + returntype : string
+  Methods:
+    + UmlMethod  (CSharpBlock block)
+    + UmlMethod  (UmlBlock block)
+    + Matches (CSharpBlock block) : bool static
+    + Matches (UmlBlock block) : bool static
+    + ToUmlCode (int padding = 0) : string override
+

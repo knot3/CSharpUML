@@ -1,0 +1,12 @@
+public static class Strings : 
+  Attributes:
+  Methods:
+    + Split (this string s, string separator) : string[] static
+    + TrimAll (this string s) : string static
+    + TrimAll (this IEnumerable<string> strings) : IEnumerable<string> static
+    + ReplaceFirst (this string text, string search, string replace) : string static
+    + Indentation (this string text) : int static
+    + IfContains (this string str, string find, string replacement, Action action) : string static
+    + IfContains (this string str, string find, Action action) : string static
+    + Clean (this string str) : string static
+

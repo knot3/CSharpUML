@@ -1,0 +1,8 @@
+public class UmlParser : IParser
+  Attributes:
+  Methods:
+    + UmlParser ()
+    - ParseBlocks (string[] lines, ref int i, int parentIndent) : UmlBlock[]
+    + Parse (IEnumerable<string> lines) : IEnumerable<IUmlObject>
+    - FilterIgnoreLines (string line) : bool
+    + Parse (string filename) : IEnumerable<IUmlObject>

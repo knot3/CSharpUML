@@ -1,0 +1,14 @@
+public class CSharpParser : IParser
+  Attributes:
+  Methods:
+    + CSharpParser  ()
+    + Parse (char[] chars, ref int i) : CSharpBlock[]
+    + Parse (IEnumerable<string> lines) : IEnumerable<IUmlObject>
+    - StripComments (IEnumerable<string> lines) : IEnumerable<string>
+
+public interface IParser : 
+  Attributes:
+  Methods:
+    + Parse (IEnumerable<string> lines) : IEnumerable<IUmlObject>
+    + Parse (string filename) : IEnumerable<IUmlObject>
+

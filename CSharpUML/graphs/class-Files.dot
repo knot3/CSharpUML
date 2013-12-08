@@ -1,0 +1,7 @@
+digraph "MenuItem"
+{
+  edge [fontname="Helvetica",fontsize="8",labelfontname="Helvetica",labelfontsize="8"];
+  node [fontname="Helvetica",fontsize="8",shape=record];
+Box_Files [label="{Files\n|Attributes:\lMethods:\l|+ WriteLines  (string filename, IEnumerable\<string\> lines) static\l+ ReadLines (string filename) : IEnumerable\<string\> static\l+ SearchFiles  (IEnumerable\<string\> directories, IEnumerable\<string\> extensions, Action\<string\> add) static\l+ SearchFiles  (string directory, IEnumerable\<string\> extensions, Action\<string\> add) static\l+ ToCharacters (this IEnumerable\<string\> lines) : IEnumerable\<char\> static\l}",height=0.2,width=0.4,color="black", fillcolor="#fcfcda",style="filled" fontcolor="black"];
+
+}

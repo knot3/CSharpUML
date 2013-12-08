@@ -1,0 +1,10 @@
+public class UmlMethod : UmlObject
+  Attributes:
+    + parameters : string[]
+    + returntype : string
+  Methods:
+    + UmlMethod (CSharpBlock block)
+    + UmlMethod (UmlBlock block)
+    + Matches (CSharpBlock block) : bool static
+    + Matches (UmlBlock block) : bool static
+    + ToUmlCode (int padding = 0) : string override

@@ -1,0 +1,23 @@
+public abstract class Block<T> : 
+  Attributes:
+    + Name : string
+    + Content : T[]
+    + Count : int
+  Methods:
+    + Block  (string name, T[] content)
+    + Block  (string name)
+    + ToString () : string override
+    + ToString (int padding) : string
+
+public sealed class CSharpBlock : Block<CSharpBlock>
+  Attributes:
+  Methods:
+    + CSharpBlock  (string name, CSharpBlock[] content)
+    + CSharpBlock  (string name)
+
+public class UmlBlock : Block<UmlBlock>
+  Attributes:
+  Methods:
+    + UmlBlock  (string name, UmlBlock[] content)
+    + UmlBlock  (string name)
+

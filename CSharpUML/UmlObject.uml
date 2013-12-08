@@ -1,0 +1,9 @@
+public abstract class UmlObject : IUmlObject
+  Attributes:
+    # name : string
+    + Publicity : Publicity
+    + Virtuality : Virtuality
+    + Name : string
+  Methods:
+    + : this (block.Name) (CSharpBlock block) : UmlObject
+    + : this (block.Name) (UmlBlock block) : UmlObject

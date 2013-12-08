@@ -1,0 +1,29 @@
+public class UmlMethod : UmlObject
+  Attributes:
+    + parameters : string[]
+    + returntype : string
+  Methods:
+    + UmlMethod  (CSharpBlock block)
+    + UmlMethod  (UmlBlock block)
+    + Matches (CSharpBlock block) : bool static
+    + Matches (UmlBlock block) : bool static
+    + ToUmlCode (int padding = 0) : string override
+
+public abstract class UmlObject : IUmlObject
+  Attributes:
+    # name : string
+    + Publicity : Publicity
+    + Virtuality : Virtuality
+    + Name : string
+  Methods:
+    +  (block.Name) : this  (CSharpBlock block)
+    +  (block.Name) : this  (UmlBlock block)
+
+public interface IUmlObject : IEquatable<IUmlObject>
+  Attributes:
+    + Publicity : Publicity
+    + Virtuality : Virtuality
+    + Name : string
+  Methods:
+    + ToUmlCode (int padding = 0) : string
+

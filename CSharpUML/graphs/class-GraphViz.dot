@@ -1,0 +1,7 @@
+digraph "MenuItem"
+{
+  edge [fontname="Helvetica",fontsize="8",labelfontname="Helvetica",labelfontsize="8"];
+  node [fontname="Helvetica",fontsize="8",shape=record];
+Box_GraphViz [label="{GraphViz\n|Attributes:\lMethods:\l|+ Dot  (string format, string input, string output) static\l}",height=0.2,width=0.4,color="black", fillcolor="#fcfcda",style="filled" fontcolor="black"];
+
+}

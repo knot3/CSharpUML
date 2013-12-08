@@ -1,0 +1,8 @@
+public static class Files : 
+  Attributes:
+  Methods:
+    + WriteLines (string filename, IEnumerable<string> lines) static
+    + ReadLines (string filename) : IEnumerable<string> static
+    + SearchFiles (IEnumerable<string> directories, IEnumerable<string> extensions, Action<string> add) static
+    + SearchFiles (string directory, IEnumerable<string> extensions, Action<string> add) static
+    + ToCharacters (this IEnumerable<string> lines) : IEnumerable<char> static

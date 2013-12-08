@@ -1,0 +1,7 @@
+digraph "MenuItem"
+{
+  edge [fontname="Helvetica",fontsize="8",labelfontname="Helvetica",labelfontsize="8"];
+  node [fontname="Helvetica",fontsize="8",shape=record];
+Box_Strings [label="{Strings\n|Attributes:\lMethods:\l|+ Split (this string s, string separator) : string\[\] static\l+ TrimAll (this string s) : string static\l+ TrimAll (this IEnumerable\<string\> strings) : IEnumerable\<string\> static\l+ ReplaceFirst (this string text, string search, string replace) : string static\l+ Indentation (this string text) : int static\l+ IfContains (this string str, string find, string replacement, Action action) : string static\l+ IfContains (this string str, string find, Action action) : string static\l+ Clean (this string str) : string static\l}",height=0.2,width=0.4,color="black", fillcolor="#fcfcda",style="filled" fontcolor="black"];
+
+}

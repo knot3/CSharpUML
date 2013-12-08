@@ -1,0 +1,8 @@
+public class ClassDiagram : 
+  Attributes:
+    - objects : IUmlObject[]
+  Methods:
+    + ClassDiagram  (IEnumerable<IUmlObject> objects)
+    + DotCode () : IEnumerable<string>
+    - Escape (string str) : string static
+

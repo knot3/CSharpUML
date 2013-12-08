@@ -1,0 +1,5 @@
+public sealed class CSharpBlock : Block<CSharpBlock>
+  Attributes:
+  Methods:
+    + CSharpBlock (string name, CSharpBlock[] content)
+    + CSharpBlock (string name)

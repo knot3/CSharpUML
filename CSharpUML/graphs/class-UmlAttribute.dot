@@ -1,0 +1,16 @@
+digraph "MenuItem"
+{
+  edge [fontname="Helvetica",fontsize="8",labelfontname="Helvetica",labelfontsize="8"];
+  node [fontname="Helvetica",fontsize="8",shape=record];
+Box_UmlAttribute [label="{UmlAttribute\n|Attributes:\l+ type : string\lMethods:\l|+ UmlAttribute  (CSharpBlock block)\l+ UmlAttribute  (UmlBlock block)\l+ Matches (CSharpBlock block) : bool static\l+ Matches (UmlBlock block) : bool static\l+ ToUmlCode (int padding = 0) : string override\l}",height=0.2,width=0.4,color="black", fillcolor="#fcfcda",style="filled" fontcolor="black"];
+
+Box_UmlObject [label="{UmlObject\n|Attributes:\l# name : string\l+ Publicity : Publicity\l+ Virtuality : Virtuality\l+ Name : string\lMethods:\l|+  (block.Name) : this  (CSharpBlock block)\l+  (block.Name) : this  (UmlBlock block)\l}",height=0.2,width=0.4,color="black", fillcolor="#fcfcda",style="filled" fontcolor="black"];
+
+Box_IUmlObject [label="{IUmlObject\n|Attributes:\l+ Publicity : Publicity\l+ Virtuality : Virtuality\l+ Name : string\lMethods:\l|+ ToUmlCode (int padding = 0) : string\l}",height=0.2,width=0.4,color="black", fillcolor="#dafcda",style="filled" fontcolor="black"];
+
+Box_IEquatable [label="{IEquatable\<IUmlObject\>\n}",height=0.2,width=0.4,color="black", fillcolor="#ffffff",style="filled" fontcolor="black"];
+
+Box_UmlObject -> Box_UmlAttribute [dir="back",color="midnightblue",fontsize="8",style="solid",arrowtail="onormal",fontname="Helvetica"];
+Box_IUmlObject -> Box_UmlObject [dir="back",color="midnightblue",fontsize="8",style="solid",arrowtail="onormal",fontname="Helvetica"];
+Box_IEquatable -> Box_IUmlObject [dir="back",color="midnightblue",fontsize="8",style="solid",arrowtail="onormal",fontname="Helvetica"];
+}

@@ -1,0 +1,7 @@
+digraph "MenuItem"
+{
+  edge [fontname="Helvetica",fontsize="8",labelfontname="Helvetica",labelfontsize="8"];
+  node [fontname="Helvetica",fontsize="8",shape=record];
+Box_Inheritance [label="{Inheritance\n|Attributes:\l+ Base : IUmlObject\l+ Derived : IUmlObject\lMethods:\l|+ Inheritance  (IUmlObject baseobj, IUmlObject derivedobj)\l+ From  (IUmlObject\[\] objects, out List\<Inheritance\> inhs, out List\<string\> unknownObjects) static\l}",height=0.2,width=0.4,color="black", fillcolor="#fcfcda",style="filled" fontcolor="black"];
+
+}

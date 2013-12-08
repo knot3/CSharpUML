@@ -1,0 +1,7 @@
+public class Inheritance : 
+  Attributes:
+    + Base : IUmlObject
+    + Derived : IUmlObject
+  Methods:
+    + Inheritance (IUmlObject baseobj, IUmlObject derivedobj)
+    + From (IUmlObject[] objects, out List<Inheritance> inhs, out List<string> unknownObjects) static

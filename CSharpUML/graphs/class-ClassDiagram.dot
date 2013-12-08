@@ -1,0 +1,7 @@
+digraph "MenuItem"
+{
+  edge [fontname="Helvetica",fontsize="8",labelfontname="Helvetica",labelfontsize="8"];
+  node [fontname="Helvetica",fontsize="8",shape=record];
+Box_ClassDiagram [label="{ClassDiagram\n|Attributes:\l- objects : IUmlObject\[\]\lMethods:\l|+ ClassDiagram  (IEnumerable\<IUmlObject\> objects)\l+ DotCode () : IEnumerable\<string\>\l- Escape (string str) : string static\l}",height=0.2,width=0.4,color="black", fillcolor="#fcfcda",style="filled" fontcolor="black"];
+
+}

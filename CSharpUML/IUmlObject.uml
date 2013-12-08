@@ -1,0 +1,7 @@
+public interface IUmlObject : IEquatable<IUmlObject>
+  Attributes:
+    + Publicity : Publicity
+    + Virtuality : Virtuality
+    + Name : string
+  Methods:
+    + ToUmlCode (int padding = 0) : string

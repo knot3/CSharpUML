@@ -1,0 +1,23 @@
+public interface IParser : 
+  Attributes:
+  Methods:
+    + Parse (IEnumerable<string> lines) : IEnumerable<IUmlObject>
+    + Parse (string filename) : IEnumerable<IUmlObject>
+
+public class CSharpParser : IParser
+  Attributes:
+  Methods:
+    + CSharpParser  ()
+    + Parse (char[] chars, ref int i) : CSharpBlock[]
+    + Parse (IEnumerable<string> lines) : IEnumerable<IUmlObject>
+    - StripComments (IEnumerable<string> lines) : IEnumerable<string>
+
+public class UmlParser : IParser
+  Attributes:
+  Methods:
+    + UmlParser  ()
+    - ParseBlocks (string[] lines, ref int i, int parentIndent) : UmlBlock[]
+    + Parse (IEnumerable<string> lines) : IEnumerable<IUmlObject>
+    - FilterIgnoreLines (string line) : bool
+    + Parse (string filename) : IEnumerable<IUmlObject>
+

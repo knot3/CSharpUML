@@ -1,0 +1,11 @@
+public class UmlEnum : UmlObject
+  Attributes:
+    - values : string[]
+  Methods:
+    + UmlEnum (CSharpBlock block)
+    + UmlEnum (UmlBlock block)
+    + ParseContent (IEnumerable<CSharpBlock> blocks) : IEnumerable<string>
+    + ParseContent (IEnumerable<UmlBlock> blocks) : IEnumerable<string>
+    + Matches (CSharpBlock block) : bool static
+    + Matches (UmlBlock block) : bool static
+    + ToUmlCode (int padding = 0) : string override

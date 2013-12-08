@@ -1,0 +1,7 @@
+digraph "MenuItem"
+{
+  edge [fontname="Helvetica",fontsize="8",labelfontname="Helvetica",labelfontsize="8"];
+  node [fontname="Helvetica",fontsize="8",shape=record];
+Box_MainClass [label="{MainClass\n|Attributes:\lMethods:\l|+ Main  (string\[\] args) static\l- Code2Uml  (IEnumerable\<string\> paths) static\l- Uml2Code  (IEnumerable\<string\> paths) static\l- Uml2Diagram  (IEnumerable\<string\> paths) static\l}",height=0.2,width=0.4,color="black", fillcolor="#fcfcda",style="filled" fontcolor="black"];
+
+}

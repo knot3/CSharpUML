@@ -13,11 +13,13 @@ namespace CSharpUML
 		{
 			Processing processing = Processing.None;
 			bool help = false;
+			string target = "";
 			int verbose = 0;
 			var p = new OptionSet () {
 				{ "v|verbose",			v => ++verbose },
 				{ "h|?|help",			v => help = v != null },
 				{ "file=",				v => {} },
+				{ "target=",			v => target = v },
 				{ "u|code2uml",			v => processing = Processing.CodeToUml },
 				{ "c|uml2code",			v => processing = Processing.UmlToCode },
 				{ "d|uml2diagram",		v => processing = Processing.UmlToDiagram }
@@ -37,29 +39,29 @@ namespace CSharpUML
 
 				case Processing.CodeToUml:
 					// c# code -> uml code
-					Code2Uml (extra);
+					Code2Uml (extra, target.Length > 0 ? target : "");
 					break;
 
 				case Processing.UmlToCode:
 					// uml code -> c# code
-					Uml2Code (extra);
+					Uml2Code (extra, target.Length > 0 ? target : "gen");
 					break;
 
 				case Processing.UmlToDiagram:
-					// uml code -> dia code
-					Uml2Diagram (extra);
+					// uml code -> dot code
+					Uml2Diagram (extra, target.Length > 0 ? target : "graphs");
 					break;
 
 				case Processing.CodeToDiagram:
-					// c# code -> dia code
-					Code2Uml (extra);
-					Uml2Diagram (extra);
+					// c# code -> dot code
+					Code2Uml (extra, "");
+					Uml2Diagram (extra, target.Length > 0 ? target : "graphs");
 					break;
 				}
 			}
 		}
 
-		private static void Code2Uml (IEnumerable<string> paths)
+		private static void Code2Uml (IEnumerable<string> paths, string target)
 		{
 			foreach (string path in paths) {
 				Console.WriteLine (path);
@@ -71,7 +73,10 @@ namespace CSharpUML
 						foreach (IUmlObject obj in objects) {
 							lines.Add (obj.ToUmlCode ());
 						}
-						string umlfile = filename.ReplaceFirst (path, path + "/uml/").Replace (".cs", ".uml");
+						string umlfile = filename.Replace (".cs", ".uml");
+						if (target.Length > 0) {
+							umlfile = umlfile.ReplaceFirst (path, target + "/");
+						}
 						Console.WriteLine ("Write: " + umlfile);
 						Files.WriteLines (umlfile, lines);
 					}
@@ -80,7 +85,7 @@ namespace CSharpUML
 			}
 		}
 
-		private static void Uml2Code (IEnumerable<string> paths)
+		private static void Uml2Code (IEnumerable<string> paths, string target)
 		{
 			foreach (string path in paths) {
 				Console.WriteLine (path);
@@ -91,8 +96,13 @@ namespace CSharpUML
 					foreach (IUmlObject obj in objects) {
 						lines.Add (obj.ToUmlCode () + "\n");
 					}
-					string genfile = filename.ReplaceFirst (path, path + "/gen/").Replace (".uml", ".cs")
+					string genfile = filename.Replace (".uml", ".cs")
 								.Replace ("/uml/", "/");
+					if (target.Length > 0) {
+						genfile = genfile.ReplaceFirst (path, target + "/");
+					} else {
+						genfile = genfile.ReplaceFirst (path, path + "/gen/");
+					}
 					Console.WriteLine ("Write: " + genfile);
 					Files.WriteLines (genfile, lines);
 				};
@@ -100,11 +110,11 @@ namespace CSharpUML
 			}
 		}
 
-		private static void Uml2Diagram (IEnumerable<string> paths)
+		private static void Uml2Diagram (IEnumerable<string> paths, string target)
 		{
 			foreach (string path in paths) {
 				Console.WriteLine (path);
-				string graphdir = path + "/graphs/";
+				string graphdir = target.Length > 0 ? target + "/" : path + "/graphs/";
 
 				List<IUmlObject> allObjects = new List<IUmlObject> ();
 				Action<string> processFile = (filename) => {
@@ -127,7 +137,7 @@ namespace CSharpUML
 
 				foreach (UmlClass obj in allObjects.OfType<UmlClass>()) {
 					string filename = "class-" + obj.Name.Clean ();
-					Console.WriteLine ("Write: " + filename);
+					Console.WriteLine ("Write: " + filename + ".svg");
 					
 					IEnumerable<IUmlObject> relatedObjects = obj.FindRelated (allObjects);
 

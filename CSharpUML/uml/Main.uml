@@ -1,0 +1,13 @@
+public class MainClass : 
+  Attributes:
+  Methods:
+    + Main (string[] args) static
+    - Code2Uml (IEnumerable<string> paths) static
+    - Uml2Code (IEnumerable<string> paths) static
+    - Uml2Diagram (IEnumerable<string> paths) static
+private enum Processing
+    None = 0
+    CodeToUml
+    UmlToCode
+    UmlToDiagram
+    CodeToDiagram
