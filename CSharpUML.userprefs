@@ -1,22 +1,20 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="CSharpUML/Main.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="CSharpUML/Inheritance.cs">
     <Files>
       <File FileName="../KnotTest/Knot3/Knot3/Utilities/Files.cs" Line="93" Column="16" />
       <File FileName="../KnotTest/Knot3/Knot3/Settings/IniFile.cs" Line="25" Column="48" />
-      <File FileName="CSharpUML/UmlAttribute.cs" Line="63" Column="27" />
-      <File FileName="CSharpUML/CSharpBlock.cs" Line="17" Column="4" />
+      <File FileName="CSharpUML/UmlAttribute.cs" Line="68" Column="21" />
       <File FileName="CSharpUML/IParser.cs" Line="6" Column="26" />
       <File FileName="CSharpUML/UmlParser.cs" Line="62" Column="4" />
-      <File FileName="CSharpUML/ClassDiagram.cs" Line="31" Column="7" />
+      <File FileName="CSharpUML/ClassDiagram.cs" Line="48" Column="6" />
       <File FileName="CSharpUML/UmlEnum.cs" Line="56" Column="58" />
-      <File FileName="CSharpUML/Inheritance.cs" Line="36" Column="10" />
+      <File FileName="CSharpUML/Inheritance.cs" Line="57" Column="3" />
       <File FileName="CSharpUML/Strings.cs" Line="53" Column="4" />
-      <File FileName="CSharpUML/UmlMethod.cs" Line="66" Column="5" />
-      <File FileName="CSharpUML/Main.cs" Line="130" Column="52" />
+      <File FileName="CSharpUML/Main.cs" Line="68" Column="13" />
       <File FileName="CSharpUML/UmlClass.cs" Line="118" Column="16" />
       <File FileName="CSharpUML/IUmlObject.cs" Line="8" Column="54" />
-      <File FileName="CSharpUML/UmlObject.cs" Line="62" Column="4" />
+      <File FileName="CSharpUML/UmlMethod.cs" Line="53" Column="48" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

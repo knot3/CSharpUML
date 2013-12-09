@@ -6,7 +6,7 @@ using NDesk.Options;
 
 namespace CSharpUML
 {
-	public class Inheritance
+	public class Inheritance : IEquatable<Inheritance>
 	{
 		public IUmlObject Base { get; set; }
 
@@ -42,10 +42,30 @@ namespace CSharpUML
 							unknownObjects.Add (basename);
 						}
 						Inheritance inh = new Inheritance (baseobj: baseobj, derivedobj: obj);
-						inhs.Add (inh);
+						if (!inhs.Contains (inh)) {
+							inhs.Add (inh);
+						}
 					}
 				}
 			}
+		}
+		
+		public override bool Equals (object obj)
+		{
+			return Equals (obj as Inheritance);
+		}
+
+		public bool Equals (Inheritance obj)
+		{
+			if (obj == null)
+				return false;
+
+			return Base.Name.Clean () == obj.Base.Name.Clean () && Derived.Name.Clean () == obj.Derived.Name.Clean ();
+		}
+ 
+		public override int GetHashCode ()
+		{
+			return Base.Name.GetHashCode () + Derived.Name.GetHashCode ();
 		}
 	}
 }
