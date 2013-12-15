@@ -10,32 +10,55 @@ namespace CSharpUML
 		{
 		}
 
+		private int nextIndent (string[] lines, int i)
+		{
+			int indent = -1;
+			for (int j = i; j < lines.Length; ++j) {
+				indent = lines [j].Indentation ();
+				// Console.WriteLine ("indent = " + indent + ": " + lines [j]);
+				if (!lines [j].Contains ("//"))
+					break;
+			}
+			return indent;
+		}
+
 		private UmlBlock[] ParseBlocks (string[] lines, ref int i, int parentIndent)
 		{
-			int baseIndent = lines [i].Indentation ();
+			int baseIndent = nextIndent (lines, i);
+
 			List<UmlBlock> blocks = new List<UmlBlock> ();
 			for (; i < lines.Length; ++i) {
 				string line = lines [i];
 				int indent = line.Indentation ();
-				//Console.WriteLine(indent + "  " + line);
-				if (indent < baseIndent) {
+				// Console.WriteLine (indent + "  " + line + "  (" + baseIndent + ")");
+
+				if (line.Trim ().Contains ("//")) {
+					//Console.WriteLine ("CurrentComments.add(" + line + ")");
+					Comments.AddParsedComment (line.TrimAll ().Substring (2).TrimAll ());
+					
+				} else if (indent < baseIndent) {
 					--i;
 					break;
+
 				} else if (indent == baseIndent) {
 					UmlBlock block;
-					if (i + 1 < lines.Length && lines [i + 1].Indentation () > indent) {
+					string[] comments = Comments.CurrentComments ();
+					if (i + 1 < lines.Length && nextIndent (lines, i + 1) > indent) {
 						i += 1;
 						block = new UmlBlock (
-								name: line.TrimAll (),
-								content: ParseBlocks (lines, ref i, indent)
+							name: line.TrimAll (),
+							content: ParseBlocks (lines, ref i, indent),
+							comments : comments
 						);
 					} else {
 						block = new UmlBlock (
-								name: line.TrimAll ()
+							name: line.TrimAll (),
+							comments: comments
 						);
 					}
 					blocks.Add (block);
-				} else {
+
+				} else if (line.Trim ().Length > 0) {
 					throw new InvalidOperationException ("This should never happen! " + line);
 				}
 			}

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace CSharpUML
 {
@@ -7,8 +8,9 @@ namespace CSharpUML
 	{
 		public string[] parameters;
 		public string returntype;
+		private string commentsKey;
 
-		public UmlMethod (CSharpBlock block)
+		public UmlMethod (CSharpBlock block, UmlClass classobj)
 			: base(block)
 		{
 			parseParams ();
@@ -29,9 +31,11 @@ namespace CSharpUML
 			if (returntype == "void")
 				returntype = "";
 			name = name.TrimAll ();
+
+			commentsKey = Comments.Key (classobj.Name, name);
 		}
 
-		public UmlMethod (UmlBlock block)
+		public UmlMethod (UmlBlock block, UmlClass classobj)
 			: base(block)
 		{
 			parseParams ();
@@ -43,6 +47,26 @@ namespace CSharpUML
 			} else {
 				returntype = "";
 			}
+
+			Comments.AddTo (commentsKey = Comments.Key (classobj.Name, name), block.comments);
+		}
+
+		public UmlMethod (Tag tag, UmlClass classobj)
+			: base(tag)
+		{
+			Tag[] paramtags = VSParser.ExtractTags (ref tag.Content, "parameter");
+
+			List<string> parameterlist = new List<string> ();
+			foreach (Tag proptag in paramtags) {
+				if (proptag.Type == "void")
+					parameterlist.Add (proptag.Name);
+				else
+					parameterlist.Add (proptag.Type + " " + proptag.Name);
+			}
+			parameters = parameterlist.ToArray ();
+			returntype = tag.Type;
+
+			commentsKey = Comments.Key (classobj.Name, name);
 		}
 
 		private void parseParams ()
@@ -109,12 +133,39 @@ namespace CSharpUML
 		public override string ToUmlCode (int padding = 0)
 		{
 			string paddingStr = String.Concat (Enumerable.Repeat (" ", padding));
-			string uml = paddingStr + Publicity.ToUml () + name + " (" +
-				string.Join (", ", parameters) + ")";
+			List<string> lines = new List<string> ();
+			lines.AddRange (Comments.PrintComments (commentsKey, paddingStr));
+			string uml = paddingStr + Publicity.ToUml () + name + " ("
+				+ string.Join (", ", parameters) + ")";
 			if (returntype.Length > 0)
 				uml += " : " + returntype;
 			uml += Virtuality.ToCode (" ", "");
-			return uml;
+			lines.Add (uml);
+			return string.Join ("\n", lines);
+		}
+
+		public override string ToTexCode ()
+		{
+			List<string> lines = new List<string> ();
+			string uml = Publicity.ToCode (@"\keyword{", "} ").Replace ("public ", "")
+				+ Virtuality.ToCode (@"\keyword{", "} ").Replace ("public ", "")
+				+ @"\ptype{" + returntype + @"} \varname{" + name + "}"
+				+ " (";
+			for (int i = 0; i < parameters.Length; ++i) {
+				string[] parts = parameters[i].Split (new char[]{' '}, 2, StringSplitOptions.RemoveEmptyEntries);
+				if (i > 0)
+					uml += ", ";
+				if (parts.Length == 1)
+					uml += @"\ptype{" + parts [0] + @"}";
+				else if (parts.Length > 1)
+					uml += @"\ptype{" + parts [0] + @"} \varname{" + parts [1] + "}";
+			}
+			uml += ")" + Virtuality.ToCode (" ", "");
+			lines.Add (@"\item[" + uml + @"] \item[]"); // \property{" + uml + @"} & ");
+			foreach (string cmt in Comments.GetComments(commentsKey)) {
+				lines.Add (cmt); // + @"\\");
+			}
+			return string.Join ("\n", lines);
 		}
 	}
 }

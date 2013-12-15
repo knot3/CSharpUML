@@ -38,7 +38,7 @@ namespace CSharpUML
 						if (names.ContainsKey (basename.Clean ().ToLower ())) {
 							baseobj = names [basename.Clean ().ToLower ()];
 						} else {
-							baseobj = new UmlClass (new UmlBlock (name: "+ " + basename));
+							baseobj = new UmlClass (new UmlBlock (name: "+ " + basename, comments: new string[]{}));
 							unknownObjects.Add (basename);
 						}
 						Inheritance inh = new Inheritance (baseobj: baseobj, derivedobj: obj);

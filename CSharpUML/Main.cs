@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 
 using NDesk.Options;
+using System.IO;
 
 namespace CSharpUML
 {
@@ -18,11 +19,13 @@ namespace CSharpUML
 			var p = new OptionSet () {
 				{ "v|verbose",			v => ++verbose },
 				{ "h|?|help",			v => help = v != null },
-				{ "file=",				v => {} },
 				{ "target=",			v => target = v },
-				{ "u|code2uml",			v => processing = Processing.CodeToUml },
-				{ "c|uml2code",			v => processing = Processing.UmlToCode },
-				{ "d|uml2diagram",		v => processing = Processing.UmlToDiagram }
+				{ "code2uml",			v => processing = Processing.CodeToUml },
+				{ "code2diagram",		v => processing = Processing.CodeToDiagram },
+				{ "uml2code",			v => processing = Processing.UmlToCode },
+				{ "uml2diagram",		v => processing = Processing.UmlToDiagram },
+				{ "vs2uml",				v => processing = Processing.VisualStudio2Uml },
+				{ "vs2tex",				v => processing = Processing.VisualStudio2Tex },
 			};
 
 			List<string> extra = p.Parse (args);
@@ -30,7 +33,7 @@ namespace CSharpUML
 				extra.Add (".");
 
 			if (processing == Processing.None)
-				processing = Processing.CodeToDiagram;
+				processing = Processing.VisualStudio2Tex;
 			Console.WriteLine (processing.ToString () + "...");
 
 			if (help) {
@@ -56,6 +59,17 @@ namespace CSharpUML
 					// c# code -> dot code
 					Code2Uml (extra, "");
 					Uml2Diagram (extra, target.Length > 0 ? target : "graphs");
+					break;
+
+				case Processing.VisualStudio2Uml:
+					target = target.Length > 0 ? target : "./Klassenindex.uml";
+					VisualStudio2Uml (extra, target);
+					break;
+
+				case Processing.VisualStudio2Tex:
+					target = target.Length > 0 ? target : "./Klassenindex.uml";
+					VisualStudio2Uml (extra, target);
+					Uml2Tex (new string[]{target}, "./Klassenindex.gentex");
 					break;
 				}
 			}
@@ -118,7 +132,7 @@ namespace CSharpUML
 
 				List<IUmlObject> allObjects = new List<IUmlObject> ();
 				Action<string> processFile = (filename) => {
-					if (!filename.Contains ("graphs")) {
+					if (!filename.Contains ("graphs") && !filename.Contains ("ModelDefinition")) {
 						IParser parser = new UmlParser ();
 						Console.WriteLine ("Read: " + filename);
 						allObjects.AddRange (parser.Parse (filename));
@@ -155,6 +169,76 @@ namespace CSharpUML
 				}
 			}
 		}
+
+		private static void VisualStudio2Uml (IEnumerable<string> paths, string target)
+		{
+			if (target.Length > 0) {
+				try {
+					Console.WriteLine ("Read: " + target);
+					IUmlObject[] readObjs = new UmlParser ().Parse (target).ToArray ();
+					Console.WriteLine ("Read: " + target);
+				} catch (FileNotFoundException ex) {
+					Console.WriteLine (ex.ToString ());
+				}
+
+				List<IUmlObject> objects = new List<IUmlObject> ();
+				for (int _try = 0; _try <= 3 && objects.Count == 0; ++_try) {
+					foreach (string _path in paths) {
+						string path = _path;
+						for (int p = 0; p < _try; ++p)
+							path += "/../";
+						Console.WriteLine (path);
+						Action<string> processFile = (filename) => {
+							if (filename.Contains ("ModelDefinition")) {
+								Console.WriteLine ("Read: " + filename);
+								IParser parser = new VSParser ();
+								objects.AddRange (parser.Parse (filename));
+							}
+						};
+						Files.SearchFiles (path, new string[]{".uml"}, processFile);
+					}
+				}
+				objects.Sort ();
+				Console.WriteLine ("Write: " + target);
+				List<string> lines = new List<string> ();
+				foreach (IUmlObject obj in objects) {
+					lines.Add (obj.ToUmlCode ());
+					lines.Add ("");
+				}
+				Files.WriteLines (target, lines);
+			} else {
+				Console.WriteLine ("Error! No target file specified!");
+			}
+		}
+
+		private static void Uml2Tex (IEnumerable<string> umlfiles, string target)
+		{
+			List<IUmlObject> allObjects = new List<IUmlObject> ();
+			foreach (string umlfile in umlfiles) {
+				IParser parser = new UmlParser ();
+				Console.WriteLine ("Read: " + umlfile);
+				allObjects.AddRange (parser.Parse (umlfile));
+			}
+
+			Console.WriteLine ("Write: " + target);
+			List<string> lines = new List<string> ();
+			lines.AddRange (UmlObject.TexHeader);
+			foreach (IUmlObject obj in allObjects) {
+				lines.Add (obj.ToTexCode ());
+				lines.Add ("");
+			}
+			Files.WriteLines (target, lines);
+
+			foreach (UmlClass obj in allObjects.OfType<UmlClass>()) {
+				// write class diagram
+				ClassDiagram dia = new ClassDiagram (new IUmlObject[]{ obj });
+				string filename = Path.GetDirectoryName (target) + "/Klassen/" + obj.Name.Clean ();
+				Files.WriteLines (filename + ".dot", dia.DotCode ());
+				//GraphViz.Dot ("svg", filename + ".dot", filename + ".svg");
+				//GraphViz.Dot ("jpg", filename + ".dot", filename + ".jpg");
+				GraphViz.Dot ("png", filename + ".dot", filename + ".png");
+			}
+		}
 	}
 
 	enum Processing
@@ -163,6 +247,8 @@ namespace CSharpUML
 		CodeToUml,
 		UmlToCode,
 		UmlToDiagram,
-		CodeToDiagram
+		CodeToDiagram,
+		VisualStudio2Uml,
+		VisualStudio2Tex,
 	}
 }

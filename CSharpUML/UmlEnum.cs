@@ -59,6 +59,15 @@ namespace CSharpUML
 			}
 			return string.Join ("\n", lines);
 		}
+
+		public override string ToTexCode ()
+		{
+			List<string> lines = new List<string> ();
+			lines.Add (@"\subsection{Enumeration " + name + @"}");
+			lines.Add (@"\paragraph{Beschreibung:}\mbox{}\\\\");
+			//foreach (string cmt in Comments.GetComments(commentsKey)) { lines.Add (cmt); }
+			return string.Join ("\n", lines);
+		}
 	}
 
 }

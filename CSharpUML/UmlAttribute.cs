@@ -1,13 +1,15 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace CSharpUML
 {
 	public class UmlAttribute : UmlObject
 	{
 		public string type;
+		private string commentsKey;
 
-		public UmlAttribute (CSharpBlock block)
+		public UmlAttribute (CSharpBlock block, UmlClass classobj)
 			: base(block)
 		{
 			name = name.Split ('=') [0].TrimAll ();
@@ -22,9 +24,11 @@ namespace CSharpUML
 				}
 			}
 			name = name.TrimAll ();
+
+			commentsKey = Comments.Key (classobj.Name, name);
 		}
 
-		public UmlAttribute (UmlBlock block)
+		public UmlAttribute (UmlBlock block, UmlClass classobj)
 			: base(block)
 		{
 			if (name.Contains (":")) {
@@ -32,6 +36,16 @@ namespace CSharpUML
 				name = p [0];
 				type = p [1];
 			}
+
+			Comments.AddTo (commentsKey = Comments.Key (classobj.Name, name), block.comments);
+		}
+
+		public UmlAttribute (Tag tag, UmlClass classobj)
+			: base(tag)
+		{
+			type = tag.Type;
+
+			commentsKey = Comments.Key (classobj.Name, name);
 		}
 
 		public static bool Matches (CSharpBlock block)
@@ -78,9 +92,25 @@ namespace CSharpUML
 		public override string ToUmlCode (int padding = 0)
 		{
 			string paddingStr = String.Concat (Enumerable.Repeat (" ", padding));
+			List<string> lines = new List<string> ();
+			lines.AddRange (Comments.PrintComments (commentsKey, paddingStr));
 			string uml = paddingStr + Publicity.ToUml () + name + " : " + type;
 			uml += Virtuality.ToCode (" ", "");
-			return uml;
+			lines.Add (uml);
+			return string.Join ("\n", lines);
+		}
+
+		public override string ToTexCode ()
+		{
+			List<string> lines = new List<string> ();
+			string uml = Publicity.ToCode (@"\keyword{", "} ").Replace ("public ", "")
+				+ Virtuality.ToCode (@"\keyword{", "} ").Replace ("public ", "")
+				+ @"\ptype{" + type + @"} \varname{" + name + "}";
+			lines.Add (@"\item[" + uml + @"] \item[]"); // \property{" + uml + @"} & ");
+			foreach (string cmt in Comments.GetComments(commentsKey)) {
+				lines.Add (cmt); // + @"\\");
+			}
+			return string.Join ("\n", lines);
 		}
 	}
 }

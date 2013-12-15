@@ -5,11 +5,12 @@ using System.Linq;
 
 namespace CSharpUML
 {
-	public class UmlClass : UmlObject
+	public class UmlClass : UmlObject, IComparable<UmlClass>
 	{
 		public ClassType type;
 		public string[] bases;
 		public IUmlObject[] Content;
+		private string commentsKey;
 
 		public UmlClass (CSharpBlock block)
 			: base(block)
@@ -33,6 +34,8 @@ namespace CSharpUML
 						(obj as UmlObject).Publicity = CSharpUML.Publicity.Public;
 				}
 			}
+
+			commentsKey = Comments.Key (name);
 		}
 
 		public UmlClass (UmlBlock block)
@@ -53,6 +56,23 @@ namespace CSharpUML
 			}
 
 			Content = ParseContent (block.Content).ToArray ();
+
+			Comments.AddTo (commentsKey = Comments.Key (name), block.comments);
+		}
+
+		public UmlClass (Tag tag)
+			: base(tag)
+		{
+			if (tag.Tagname == "interface")
+				type = ClassType.Interface;
+			else
+				type = ClassType.Class;
+
+			Content = ParseContent (tag).ToArray ();
+			bases = new string[]{};
+			Publicity = Publicity.Public;
+
+			commentsKey = Comments.Key (name);
 		}
 
 		public IEnumerable<IUmlObject> ParseContent (IEnumerable<CSharpBlock> blocks)
@@ -63,9 +83,9 @@ namespace CSharpUML
 				} else if (UmlEnum.Matches (subblock)) {
 					yield return new UmlEnum (subblock);
 				} else if (UmlMethod.Matches (subblock)) {
-					yield return new UmlMethod (subblock);
+					yield return new UmlMethod (subblock, this);
 				} else if (UmlAttribute.Matches (subblock)) {
-					yield return new UmlAttribute (subblock);
+					yield return new UmlAttribute (subblock, this);
 				}
 			}
 		}
@@ -78,10 +98,25 @@ namespace CSharpUML
 				} else if (UmlEnum.Matches (subblock)) {
 					yield return new UmlEnum (subblock);
 				} else if (UmlMethod.Matches (subblock)) {
-					yield return new UmlMethod (subblock);
+					yield return new UmlMethod (subblock, this);
 				} else if (UmlAttribute.Matches (subblock)) {
-					yield return new UmlAttribute (subblock);
+					yield return new UmlAttribute (subblock, this);
 				}
+			}
+		}
+
+		public IEnumerable<IUmlObject> ParseContent (Tag classtag)
+		{
+			Tag[] proptags = VSParser.ExtractTags (ref classtag.Content, "property");
+
+			foreach (Tag proptag in proptags) {
+				yield return new UmlAttribute (proptag, this);
+			}
+
+			Tag[] methtags = VSParser.ExtractTags (ref classtag.Content, "operation");
+
+			foreach (Tag methtag in methtags) {
+				yield return new UmlMethod (methtag, this);
 			}
 		}
 
@@ -104,6 +139,7 @@ namespace CSharpUML
 		{
 			string paddingStr = String.Concat (Enumerable.Repeat (" ", padding));
 			List<string> lines = new List<string> ();
+			lines.AddRange (Comments.PrintComments (commentsKey, paddingStr));
 			lines.Add (
 				paddingStr + Publicity.ToCode ("", " ") + Virtuality.ToCode ("", " ") + type.ToCode ("", " ")
 				+ name
@@ -120,6 +156,41 @@ namespace CSharpUML
 				if (!(obj is UmlAttribute)) {
 					lines.Add (obj.ToUmlCode (padding + 4));
 				}
+			}
+			return string.Join ("\n", lines);
+		}
+
+		public override string ToTexCode ()
+		{
+			if (Content.Length == 0)
+				return "";
+
+			string typestr = type == ClassType.Interface ? "Schnittstelle" : "Klasse";
+			List<string> lines = new List<string> ();
+			lines.Add (@"\subsection{" + typestr + @" " + name + @"}");
+			lines.Add (@"\paragraph{Beschreibung:}\mbox{}\\\\");
+			foreach (string cmt in Comments.GetComments(commentsKey)) {
+				lines.Add (cmt);
+			}
+			lines.Add (@"\begin{wrapfigure}{R}{0.5\textwidth}" + "\n" + @"\centering");
+			lines.Add (@"\includegraphics[scale=0.2]{Klassen/" + Name.Clean () + @"}");
+			//lines.Add(@"\includesvg[svgpath=./, width = 0.35\textwidth]{Klassen/" + Name.Clean () + @"}");
+//			lines.Add (@"\caption{\label{fig:" + Name.Clean () + @"}" + typestr + @" " + Name + @"}");
+			lines.Add (@"\end{wrapfigure}");
+			lines.Add ("\n");
+			if (Content.OfType<UmlAttribute> ().Count () > 0) {
+				lines.Add (@"\paragraph{Eigenschaften:}\mbox{} \begin{description} "); //\\\\ \begin{tabular}{ll}");
+				foreach (UmlAttribute obj in Content.OfType<UmlAttribute>()) {
+					lines.Add (obj.ToTexCode ());
+				}
+				lines.Add (@"\end{description}"); //\end{tabular}");
+			}
+			if (Content.OfType<UmlMethod> ().Count () > 0) {
+				lines.Add (@"\paragraph{Methoden:}\mbox{} \begin{description} "); //\\\\ \begin{tabular}{ll}");
+				foreach (UmlMethod obj in Content.OfType<UmlMethod>()) {
+					lines.Add (obj.ToTexCode ());
+				}
+				lines.Add (@"\end{description}"); //\end{tabular}");
 			}
 			return string.Join ("\n", lines);
 		}
@@ -171,6 +242,10 @@ namespace CSharpUML
 			}
 		}
 
+		public int CompareTo (UmlClass y)
+		{
+			return base.CompareTo (y);
+		}
 	}
 
 	public enum ClassType

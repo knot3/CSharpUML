@@ -26,6 +26,18 @@ namespace CSharpUML
 			name = name.IfContains ("- ", () => Publicity = Publicity.Private);
 		}
 
+		public UmlObject (Tag tag)
+			: this (tag.Name)
+		{
+			Publicity = Publicity.Public;
+			if (tag.Params.ContainsKey ("visibility")) {
+				if (tag.Params ["visibility"].ToLower () == "private")
+					Publicity = Publicity.Private;
+				else if (tag.Params ["visibility"].ToLower () == "protected")
+					Publicity = Publicity.Protected;
+			}
+		}
+
 		private UmlObject (string _name)
 		{
 			name = " " + _name + " ";
@@ -46,6 +58,8 @@ namespace CSharpUML
 
 		public abstract string ToUmlCode (int padding = 0);
 
+		public abstract string ToTexCode ();
+
 		public override bool Equals (object obj)
 		{
 			return Equals (obj as IUmlObject);
@@ -63,6 +77,19 @@ namespace CSharpUML
 		{
 			return Name.GetHashCode ();
 		}
+
+		public int CompareTo (IUmlObject y)
+		{
+			return String.Compare (name, y.Name);
+		}
+
+		public static string[] TexHeader = new string[]{
+			@"\newcommand{\property}[1]{\texttt{#1}}" + "\n",
+			@"\newcommand{\method}[1]{\texttt{#1}}" + "\n",
+			@"\newcommand{\keyword}[1]{\textcolor{BlueViolet}{#1}}" + "\n",
+			@"\newcommand{\ptype}[1]{\textcolor{OliveGreen}{#1}}" + "\n",
+			@"\newcommand{\varname}[1]{\textcolor{Black}{#1}}" + "\n",
+		};
 	}
 
 	public enum Publicity

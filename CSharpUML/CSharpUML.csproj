@@ -58,6 +58,8 @@
     <Compile Include="ClassDiagram.cs" />
     <Compile Include="Inheritance.cs" />
     <Compile Include="GraphViz.cs" />
+    <Compile Include="VSParser.cs" />
+    <Compile Include="Comments.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

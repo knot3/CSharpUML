@@ -19,22 +19,24 @@ namespace CSharpUML
 		{
 			yield return "digraph \"MenuItem\"";
 			yield return "{";
-			yield return "  edge [fontname=\"Helvetica\",fontsize=\"8\",labelfontname=\"Helvetica\",labelfontsize=\"8\"];";
-			yield return "  node [fontname=\"Helvetica\",fontsize=\"8\",shape=record];";
+			yield return "  edge [fontname=\"Arial\",fontsize=\"8\",labelfontname=\"Lucida\",labelfontsize=\"8\"];";
+			yield return "  node [fontname=\"Arial\",fontsize=\"8\",shape=record];";
 
 			foreach (IUmlObject obj in objects) {
-				string[] umlcode = obj.ToUmlCode ().Split ("\n");
+				string[] umlcode = obj.ToUmlCode ().Split ("\n").Where (
+					(l) => !l.Contains ("//") && !l.Contains("Attributes") && !l.Contains("Methods")
+				).ToArray ();
 				string code = "Box_" + obj.Name.Clean () + " [label=\"{" + Escape (obj.Name) + "\\n|";
 				for (int i = 1; i < umlcode.Length; ++i) {
-					if (UmlAttribute.Matches (new UmlBlock(name: umlcode [i]))) {
+					if (UmlAttribute.Matches (new UmlBlock (name: umlcode [i], comments: new string[]{}))) {
 						code += Escape (umlcode [i]) + "\\l";
 					}
 				}
 				//if (i > 1 && i + 1 < umlcode.Length) {
-					code += "|";
+				code += "|";
 				//}
 				for (int i = 1; i < umlcode.Length; ++i) {
-					if (!UmlAttribute.Matches (new UmlBlock(name: umlcode [i]))) {
+					if (!UmlAttribute.Matches (new UmlBlock (name: umlcode [i], comments: new string[]{}))) {
 						code += Escape (umlcode [i]) + "\\l";
 					}
 				}

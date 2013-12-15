@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 
 using NDesk.Options;
+using System.Collections;
 
 namespace CSharpUML
 {
-	public interface IUmlObject : IEquatable<IUmlObject>
+	public interface IUmlObject : IEquatable<IUmlObject>, IComparable<IUmlObject>
 	{
 		string ToUmlCode(int padding = 0);
+		string ToTexCode();
 		
 		Publicity Publicity { get; }
 		Virtuality Virtuality { get; }
