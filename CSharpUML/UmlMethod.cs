@@ -6,6 +6,7 @@ namespace CSharpUML
 {
 	public class UmlMethod : UmlObject
 	{
+		public bool IsContructor = false;
 		public string[] parameters;
 		public string returntype;
 		private string commentsKey;
@@ -56,15 +57,21 @@ namespace CSharpUML
 		{
 			Tag[] paramtags = VSParser.ExtractTags (ref tag.Content, "parameter");
 
+			returntype = "void";
+
 			List<string> parameterlist = new List<string> ();
 			foreach (Tag proptag in paramtags) {
-				if (proptag.Type == "void")
-					parameterlist.Add (proptag.Name);
-				else
-					parameterlist.Add (proptag.Type + " " + proptag.Name);
+				string type = proptag.ParseType ();
+				if (proptag.Params.ContainsKey ("direction") && proptag.Params ["direction"].ToLower () == "return") {
+					returntype = type;
+				} else {
+					if (type == "void")
+						parameterlist.Add (proptag.Name);
+					else
+						parameterlist.Add (type + " " + proptag.Name);
+				}
 			}
 			parameters = parameterlist.ToArray ();
-			returntype = tag.Type;
 
 			commentsKey = Comments.Key (classobj.Name, name);
 		}
@@ -149,16 +156,16 @@ namespace CSharpUML
 			List<string> lines = new List<string> ();
 			string uml = Publicity.ToCode (@"\keyword{", "} ").Replace ("public ", "")
 				+ Virtuality.ToCode (@"\keyword{", "} ").Replace ("public ", "")
-				+ @"\ptype{" + returntype + @"} \varname{" + name + "}"
-				+ " (";
+				+ (IsContructor ? "" : @"\ptype{" + returntype + @"} ")
+				+ @"\varname{" + name.ToTexCode () + "} (";
 			for (int i = 0; i < parameters.Length; ++i) {
-				string[] parts = parameters[i].Split (new char[]{' '}, 2, StringSplitOptions.RemoveEmptyEntries);
+				string[] parts = parameters [i].Split (new char[]{' '}, 2, StringSplitOptions.RemoveEmptyEntries);
 				if (i > 0)
 					uml += ", ";
 				if (parts.Length == 1)
 					uml += @"\ptype{" + parts [0] + @"}";
 				else if (parts.Length > 1)
-					uml += @"\ptype{" + parts [0] + @"} \varname{" + parts [1] + "}";
+					uml += @"\ptype{" + parts [0] + @"} \varname{" + parts [1].ToTexCode () + "}";
 			}
 			uml += ")" + Virtuality.ToCode (" ", "");
 			lines.Add (@"\item[" + uml + @"] \item[]"); // \property{" + uml + @"} & ");

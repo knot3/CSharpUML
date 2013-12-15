@@ -25,9 +25,9 @@ namespace CSharpUML
 					tags.Add (new Tag (tagname: tagname, content: tagcontent));
 				}
 
-				matches = Regex.Matches (content, @"([<]" + tagname + @"[ >])(.*?)([<]/" + tagname + @"[>])");
-				//Console.WriteLine ("match: " + @"([<]" + tagname + @"[ >])(.*?)([<]/" + tagname + @"[>])");
-				//Console.WriteLine ("matches: " + matches.Count);
+				matches = Regex.Matches (content, @"([<]" + tagname + @"[ >])([^>]*?"+"\""+@">.*?)([<]/" + tagname + @"[>])");
+				Console.WriteLine ("match: " + @"([<]" + tagname + @"[ >])(.*?)([<]/" + tagname + @"[>])");
+				Console.WriteLine ("matches: " + matches.Count);
 
 				foreach (Match match in matches) {
 					string tagcontent = match.Groups [1].Value + match.Groups [2].Value + match.Groups [3].Value;
@@ -46,7 +46,9 @@ namespace CSharpUML
 			content = content.RegexReplace (@"[\r\n\s]+", " ");
 			content = content.RegexReplace ("\"........-....-....-....-............\"", "");
 
-			Tag[] classes = ExtractTags (ref content, "class", "interface");
+			Tag[] junk = ExtractTags(ref content, "redefinableTemplateSignature");
+
+			Tag[] classes = ExtractTags (ref content, "class", "Interface");
 
 			foreach (Tag tag in classes) {
 				if (tag.Params.ContainsKey ("name")) {
@@ -125,22 +127,18 @@ namespace CSharpUML
 	{
 		public string Tagname;
 		public string Name;
-		public string Type;
 		public string Content;
 		public Dictionary<string, string> Params;
 		public List<string> TrueParams;
 
 		public Tag (string tagname, string content)
 		{
-			Tagname = tagname;
-			Type = "void";
+			Tagname = tagname.ToLower ();
 			Name = "";
 			Content = content;
 			Params = new Dictionary<string, string> ();
 			TrueParams = new List<string> ();
 			parseParams ();
-			parseType ();
-			Type = Type.Replace ("&lt;", "<").Replace ("&gt;", ">");
 			Name = Name.Replace ("&lt;", "<").Replace ("&gt;", ">");
 		}
 
@@ -174,11 +172,14 @@ namespace CSharpUML
 			}
 		}
 
-		private void parseType ()
+		public string ParseType ()
 		{
+			string type = "void";
 			if (Content.Contains ("LastKnownName=\"")) {
-				Type = Content.Split ("LastKnownName=\"") [1].Split ('"') [0];
+				type = Content.Split ("LastKnownName=\"") [1].Split ('"') [0]
+					.Replace ("&lt;", "<").Replace ("&gt;", ">");
 			}
+			return type;
 		}
 	};
 		

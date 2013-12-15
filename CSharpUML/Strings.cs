@@ -62,6 +62,12 @@ namespace CSharpUML
 		{
 			return new String (str.Split ("<") [0].Where (Char.IsLetterOrDigit).ToArray ());
 		}
+		public static string ToTexCode (this string str)
+		{
+			if (str.StartsWith("_"))
+				str = str.Substring(1);
+			return str;
+		}
 
 		public static string RegexReplace (this string str, string find, string replacement)
 		{

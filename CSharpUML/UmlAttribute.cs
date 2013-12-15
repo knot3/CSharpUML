@@ -43,7 +43,7 @@ namespace CSharpUML
 		public UmlAttribute (Tag tag, UmlClass classobj)
 			: base(tag)
 		{
-			type = tag.Type;
+			type = tag.ParseType ();
 
 			commentsKey = Comments.Key (classobj.Name, name);
 		}

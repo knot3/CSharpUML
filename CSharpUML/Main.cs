@@ -62,14 +62,14 @@ namespace CSharpUML
 					break;
 
 				case Processing.VisualStudio2Uml:
-					target = target.Length > 0 ? target : "./Klassenindex.uml";
+					target = target.Length > 0 ? target : "./Klassenuebersicht.uml";
 					VisualStudio2Uml (extra, target);
 					break;
 
 				case Processing.VisualStudio2Tex:
-					target = target.Length > 0 ? target : "./Klassenindex.uml";
+					target = target.Length > 0 ? target : "./Klassenuebersicht.uml";
 					VisualStudio2Uml (extra, target);
-					Uml2Tex (new string[]{target}, "./Klassenindex.gentex");
+					Uml2Tex (new string[]{target}, "./Klassenuebersicht.gentex");
 					break;
 				}
 			}
@@ -223,10 +223,21 @@ namespace CSharpUML
 			Console.WriteLine ("Write: " + target);
 			List<string> lines = new List<string> ();
 			lines.AddRange (UmlObject.TexHeader);
-			foreach (IUmlObject obj in allObjects) {
-				lines.Add (obj.ToTexCode ());
-				lines.Add ("");
+			lines.Add (@"\section{Klassen}");
+			foreach (UmlClass obj in allObjects.OfType<UmlClass>()) {
+				if (obj.type != ClassType.Interface) {
+					lines.Add (obj.ToTexCode ());
+					lines.Add ("");
+				}
 			}
+			lines.Add (@"\section{Schnittstellen}");
+			foreach (UmlClass obj in allObjects.OfType<UmlClass>()) {
+				if (obj.type == ClassType.Interface) {
+					lines.Add (obj.ToTexCode ());
+					lines.Add ("");
+				}
+			}
+			lines.Add (@"\section{Enumerationen}");
 			Files.WriteLines (target, lines);
 
 			foreach (UmlClass obj in allObjects.OfType<UmlClass>()) {

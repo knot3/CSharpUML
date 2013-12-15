@@ -178,16 +178,27 @@ namespace CSharpUML
 //			lines.Add (@"\caption{\label{fig:" + Name.Clean () + @"}" + typestr + @" " + Name + @"}");
 			lines.Add (@"\end{wrapfigure}");
 			lines.Add ("\n");
-			if (Content.OfType<UmlAttribute> ().Count () > 0) {
+			IEnumerable<UmlAttribute> attributes = Content.OfType<UmlAttribute> ();
+			IEnumerable<UmlMethod> contructors = Content.OfType<UmlMethod> ().Where ((m) => m.Name == Name);
+			IEnumerable<UmlMethod> methods = Content.OfType<UmlMethod> ().Where ((m) => m.Name != Name);
+			if (attributes.Count () > 0) {
 				lines.Add (@"\paragraph{Eigenschaften:}\mbox{} \begin{description} "); //\\\\ \begin{tabular}{ll}");
-				foreach (UmlAttribute obj in Content.OfType<UmlAttribute>()) {
+				foreach (UmlAttribute obj in attributes) {
 					lines.Add (obj.ToTexCode ());
 				}
 				lines.Add (@"\end{description}"); //\end{tabular}");
 			}
-			if (Content.OfType<UmlMethod> ().Count () > 0) {
+			if (contructors.Count () > 0) {
+				lines.Add (@"\paragraph{Konstruktoren:}\mbox{} \begin{description} "); //\\\\ \begin{tabular}{ll}");
+				foreach (UmlMethod obj in contructors) {
+					obj.IsContructor = true;
+					lines.Add (obj.ToTexCode ());
+				}
+				lines.Add (@"\end{description}"); //\end{tabular}");
+			}
+			if (methods.Count () > 0) {
 				lines.Add (@"\paragraph{Methoden:}\mbox{} \begin{description} "); //\\\\ \begin{tabular}{ll}");
-				foreach (UmlMethod obj in Content.OfType<UmlMethod>()) {
+				foreach (UmlMethod obj in methods) {
 					lines.Add (obj.ToTexCode ());
 				}
 				lines.Add (@"\end{description}"); //\end{tabular}");

@@ -7,10 +7,13 @@ namespace CSharpUML
 	{
 		public static void Dot (string format, string input, string output, string extra="")
 		{
-			var info = new ProcessStartInfo (
+			try {
+				var info = new ProcessStartInfo (
   				  "dot", "-T" + format + " -o'" + output + "' '" + input + "'" + " -Gdpi=300"
-			);
-			Process.Start (info);
+				);
+				Process.Start (info);
+			} catch (Exception ex) {
+			}
 		}
 	}
 }
