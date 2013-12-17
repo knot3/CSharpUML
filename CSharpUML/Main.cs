@@ -252,7 +252,7 @@ namespace CSharpUML
 		}
 
 		private static bool IsBlacklisted(string name) {
-			return name == "T" || name.StartsWith("XNA") || name.Contains("IEnumerable")
+			return name.Length == 1 || name.StartsWith("XNA") || name.Contains("IEnumerable")
 				 || name.Contains("IEquatable") || name.Contains("ICloneable");
 		}
 	}

@@ -62,10 +62,20 @@ namespace CSharpUML
 		{
 			return new String (str.Split ("<") [0].Where (Char.IsLetterOrDigit).ToArray ());
 		}
+
+		public static string Unique (this string[] arr)
+		{
+			string str = "";
+			foreach (string elem in arr) {
+				str += elem.Clean ().ToLower ();
+			}
+			return str;
+		}
+
 		public static string ToTexCode (this string str)
 		{
-			if (str.StartsWith("_"))
-				str = str.Substring(1);
+			if (str.StartsWith ("_"))
+				str = str.Substring (1);
 			return str;
 		}
 

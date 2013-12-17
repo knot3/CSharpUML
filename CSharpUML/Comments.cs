@@ -14,6 +14,11 @@ namespace CSharpUML
 			return name;
 		}
 
+		public static string Key (string name1, string name2, string subid)
+		{
+			return name1 + "." + name2+":"+subid;
+		}
+
 		public static string Key (string name1, string name2)
 		{
 			return name1 + "." + name2;

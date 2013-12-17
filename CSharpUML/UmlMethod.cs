@@ -33,7 +33,7 @@ namespace CSharpUML
 				returntype = "";
 			name = name.TrimAll ();
 
-			commentsKey = Comments.Key (classobj.Name, name);
+			commentsKey = Comments.Key (classobj.Name, name, parameters.Unique());
 		}
 
 		public UmlMethod (UmlBlock block, UmlClass classobj)
@@ -49,7 +49,7 @@ namespace CSharpUML
 				returntype = "";
 			}
 
-			Comments.AddTo (commentsKey = Comments.Key (classobj.Name, name), block.comments);
+			Comments.AddTo (commentsKey = Comments.Key (classobj.Name, name, parameters.Unique()), block.comments);
 		}
 
 		public UmlMethod (Tag tag, UmlClass classobj)
@@ -73,7 +73,7 @@ namespace CSharpUML
 			}
 			parameters = parameterlist.ToArray ();
 
-			commentsKey = Comments.Key (classobj.Name, name);
+			commentsKey = Comments.Key (classobj.Name, name, parameters.Unique());
 		}
 
 		private void parseParams ()

@@ -4,17 +4,17 @@
     <Files>
       <File FileName="CSharpUML/CSharpParser.cs" Line="72" Column="8" />
       <File FileName="CSharpUML/VSParser.cs" Line="49" Column="74" />
-      <File FileName="CSharpUML/Strings.cs" Line="69" Column="15" />
-      <File FileName="CSharpUML/Main.cs" Line="256" Column="67" />
-      <File FileName="CSharpUML/UmlClass.cs" Line="202" Column="35" />
+      <File FileName="CSharpUML/Strings.cs" Line="72" Column="15" />
+      <File FileName="CSharpUML/Main.cs" Line="255" Column="27" />
+      <File FileName="CSharpUML/UmlClass.cs" Line="75" Column="38" />
       <File FileName="CSharpUML/UmlAttribute.cs" Line="46" Column="26" />
-      <File FileName="CSharpUML/UmlMethod.cs" Line="168" Column="76" />
-      <File FileName="CSharpUML/UmlParser.cs" Line="33" Column="8" />
-      <File FileName="CSharpUML/Comments.cs" Line="37" Column="3" />
+      <File FileName="CSharpUML/UmlMethod.cs" Line="36" Column="27" />
+      <File FileName="CSharpUML/UmlParser.cs" Line="38" Column="6" />
       <File FileName="CSharpUML/UmlBlock.cs" Line="19" Column="29" />
       <File FileName="CSharpUML/UmlEnum.cs" Line="68" Column="83" />
       <File FileName="CSharpUML/UmlObject.cs" Line="72" Column="4" />
       <File FileName="CSharpUML/ClassDiagram.cs" Line="23" Column="57" />
+      <File FileName="CSharpUML/Comments.cs" Line="19" Column="41" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
