@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpUML", "CSharpUML\CSharpUML.csproj", "{F76CEA6A-640B-429D-8DE3-F80226313903}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpUML-Linux", "CSharpUML\CSharpUML-Linux.csproj", "{F76CEA6A-640B-429D-8DE3-F80226313903}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +15,6 @@ Global
 		{F76CEA6A-640B-429D-8DE3-F80226313903}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = CSharpUML\CSharpUML.csproj
+		StartupItem = CSharpUML\CSharpUML-Linux.csproj
 	EndGlobalSection
 EndGlobal

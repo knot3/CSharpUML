@@ -203,7 +203,7 @@ namespace CSharpUML
 				}
 				lines.Add (@"\end{description}"); //\end{tabular}");
 			}
-			return string.Join ("\n", lines);
+			return string.Join ("\n", lines).Replace ("<", "$<$").Replace (">", "$>$");
 		}
 
 		public bool IsBase (UmlClass obj)

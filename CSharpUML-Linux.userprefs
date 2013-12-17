@@ -1,0 +1,15 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="CSharpUML/UmlClass.cs">
+    <Files>
+      <File FileName="CSharpUML/Main.cs" Line="255" Column="27" />
+      <File FileName="CSharpUML/VSParser.cs" Line="49" Column="74" />
+      <File FileName="CSharpUML/UmlMethod.cs" Line="36" Column="27" />
+      <File FileName="CSharpUML/UmlClass.cs" Line="206" Column="67" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
