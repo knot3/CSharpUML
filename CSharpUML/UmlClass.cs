@@ -172,8 +172,9 @@ namespace CSharpUML
 			foreach (string cmt in Comments.GetComments(commentsKey)) {
 				lines.Add (cmt);
 			}
-			lines.Add (@"\begin{wrapfigure}{R}{0.5\textwidth}" + "\n" + @"\centering");
-			lines.Add (@"\includegraphics[scale=0.2]{Klassen/" + Name.Clean () + @"}");
+			lines.Add(@"\setlength{\columnsep}{10pt}%");
+			lines.Add (@"\begin{wrapfigure}{R}{8cm}" + "\n" + @"\centering");
+			lines.Add (@"\includegraphics[scale=0.5]{Klassen/" + Name.Clean () + @"}");
 			//lines.Add(@"\includesvg[svgpath=./, width = 0.35\textwidth]{Klassen/" + Name.Clean () + @"}");
 //			lines.Add (@"\caption{\label{fig:" + Name.Clean () + @"}" + typestr + @" " + Name + @"}");
 			lines.Add (@"\end{wrapfigure}");

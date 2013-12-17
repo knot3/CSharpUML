@@ -15,7 +15,7 @@ namespace CSharpUML
 			this.objects = objects.ToArray ();
 		}
 
-		public IEnumerable<string> DotCode ()
+		public IEnumerable<string> DotCode (string param = "")
 		{
 			yield return "digraph \"MenuItem\"";
 			yield return "{";
@@ -42,8 +42,8 @@ namespace CSharpUML
 				}
 				string color = obj is UmlClass && (obj as UmlClass).type == ClassType.Interface ?
 					"dafcda" : "fcfcda";
-				code += "}\",height=0.2,width=0.4,color=\"black\", fillcolor=\"#" + color + "\"," +
-					"style=\"filled\" fontcolor=\"black\"];\n";
+				code += "}\",height=0.2,width=0.4,color=\"black\", fillcolor=\"#" + color + "\"," + //
+					"style=\"filled\", fontcolor=\"black\"];\n";
 				yield return code;
 			}
 
@@ -63,7 +63,7 @@ namespace CSharpUML
 					" [dir=\"back\",color=\"midnightblue\",fontsize=\"8\",style=\"solid\"," +
 					"arrowtail=\"onormal\",fontname=\"Helvetica\"];";
 			}
-
+			yield return param;
 			yield return "}";
 		}
 

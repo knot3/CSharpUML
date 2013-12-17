@@ -9,10 +9,26 @@ namespace CSharpUML
 		{
 			try {
 				var info = new ProcessStartInfo (
-  				  "dot", "-T" + format + " -o'" + output + "' '" + input + "'" + " -Gdpi=300"
+					"dot", "-T" + format + " -o'" + output + "' '" + input + "'" //+ " -Gdpi=300"
 				);
-				Process.Start (info);
-			} catch (Exception ex) {
+				using (Process exeProcess = Process.Start (info)) {
+					exeProcess.WaitForExit ();
+				}
+
+			} catch (Exception) {
+			}
+		}
+
+		public static void Convert (params string[] parameters)
+		{
+			try {
+				var info = new ProcessStartInfo (
+  				  "convert", string.Join (" ", parameters)
+				);
+				using (Process exeProcess = Process.Start (info)) {
+					exeProcess.WaitForExit ();
+				}
+			} catch (Exception) {
 			}
 		}
 	}

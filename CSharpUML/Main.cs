@@ -244,10 +244,12 @@ namespace CSharpUML
 				// write class diagram
 				ClassDiagram dia = new ClassDiagram (new IUmlObject[]{ obj });
 				string filename = Path.GetDirectoryName (target) + "/Klassen/" + obj.Name.Clean ();
-				Files.WriteLines (filename + ".dot", dia.DotCode ());
+				Files.WriteLines (filename + ".dot", dia.DotCode ());//
 				//GraphViz.Dot ("svg", filename + ".dot", filename + ".svg");
 				//GraphViz.Dot ("jpg", filename + ".dot", filename + ".jpg");
-				GraphViz.Dot ("png", filename + ".dot", filename + ".png");
+				//GraphViz.Dot ("png", filename + ".dot", filename + ".png");
+				GraphViz.Dot ("svg", filename + ".dot", filename + ".svg");
+				GraphViz.Convert("-density 100", "svg:"+filename + ".svg", filename + ".png");
 			}
 		}
 
