@@ -1,11 +1,11 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="CSharpUML/UmlMethod.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="CSharpUML/Main.cs">
     <Files>
       <File FileName="CSharpUML/CSharpParser.cs" Line="72" Column="8" />
       <File FileName="CSharpUML/VSParser.cs" Line="49" Column="74" />
       <File FileName="CSharpUML/Strings.cs" Line="69" Column="15" />
-      <File FileName="CSharpUML/Main.cs" Line="229" Column="35" />
+      <File FileName="CSharpUML/Main.cs" Line="256" Column="67" />
       <File FileName="CSharpUML/UmlClass.cs" Line="202" Column="35" />
       <File FileName="CSharpUML/UmlAttribute.cs" Line="46" Column="26" />
       <File FileName="CSharpUML/UmlMethod.cs" Line="168" Column="76" />

@@ -201,7 +201,7 @@ namespace CSharpUML
 				objects.Sort ();
 				Console.WriteLine ("Write: " + target);
 				List<string> lines = new List<string> ();
-				foreach (IUmlObject obj in objects) {
+				foreach (IUmlObject obj in objects.Where ((o) => !IsBlacklisted(o.Name))) {
 					lines.Add (obj.ToUmlCode ());
 					lines.Add ("");
 				}
@@ -249,6 +249,11 @@ namespace CSharpUML
 				//GraphViz.Dot ("jpg", filename + ".dot", filename + ".jpg");
 				GraphViz.Dot ("png", filename + ".dot", filename + ".png");
 			}
+		}
+
+		private static bool IsBlacklisted(string name) {
+			return name == "T" || name.StartsWith("XNA") || name.Contains("IEnumerable")
+				 || name.Contains("IEquatable") || name.Contains("ICloneable");
 		}
 	}
 
