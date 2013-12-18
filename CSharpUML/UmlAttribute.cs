@@ -106,7 +106,8 @@ namespace CSharpUML
 			string uml = Publicity.ToCode (@"\keyword{", "} ").Replace ("public ", "")
 				+ Virtuality.ToCode (@"\keyword{", "} ").Replace ("public ", "")
 				+ @"\ptype{" + type + @"} \varname{" + name + "}";
-			lines.Add (@"\item[" + uml + @"] \item[]"); // \property{" + uml + @"} & ");
+			//lines.Add (@"\item[" + uml + @"] \item[]");
+			lines.Add (@"\textbf{" + uml + @"}\\~\\");
 			foreach (string cmt in Comments.GetComments(commentsKey)) {
 				lines.Add (cmt); // + @"\\");
 			}

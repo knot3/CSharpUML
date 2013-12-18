@@ -168,9 +168,10 @@ namespace CSharpUML
 					uml += @"\ptype{" + parts [0] + @"} \varname{" + parts [1].ToTexCode () + "}";
 			}
 			uml += ")" + Virtuality.ToCode (" ", "");
-			lines.Add (@"\item[" + uml + @"] \item[]"); // \property{" + uml + @"} & ");
+			// lines.Add (@"\item[" + uml + @"] \item[]");
+			lines.Add (@"\textbf{" + uml + @"}\\~\\");
 			foreach (string cmt in Comments.GetComments(commentsKey)) {
-				lines.Add (cmt); // + @"\\");
+				lines.Add (cmt);
 			}
 			return string.Join ("\n", lines);
 		}

@@ -73,7 +73,7 @@ namespace CSharpUML
 
 		public static bool HasComments (string name)
 		{
-			return name != null && CommentMap.ContainsKey (name);
+			return name != null && CommentMap.ContainsKey (name) && CommentMap[name].Count > 0;
 		}
 	}
 }

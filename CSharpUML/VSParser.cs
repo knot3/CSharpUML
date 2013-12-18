@@ -59,59 +59,16 @@ namespace CSharpUML
 				}
 			}
 
-			/*
-			content. s/[\r\n]+/ /gm;
-			$content =~ s/\s+/ /gm;
-			$content =~ s///gm;
-			my %classes = ();
-			my $class_or_interface;
-			while (defined(my $classtag = extract_tag(["class","interface"], \$class_or_interface, \$content))) {
-				my $params = parse_params(\$classtag);
-				# foreach my $p (keys %$params) { print STDERR $p." => ".$params->{$p}."\n"; }
-				my @properties = ();
-				my @propertynames = ();
-				while (defined(my $tag = extract_tag(["property"], undef, \$classtag))) {
-					my $params = parse_params(\$tag);
-					my $name = $params->{"name"};
-					my $type = get_type(\$tag);
-					my $prop = $type." ".$name;
-					$prop .= " [".join(",",true_params($params))."]" if true_params($params);
-					push @properties, $prop;
-					push @propertynames, $name;
-				}
-				my @methods = ();
-				my @methodnames = ();
-				while (defined(my $tag = extract_tag(["operation"], undef, \$classtag))) {
-					my $params = parse_params(\$tag);
-					my @parameters = ();
-					while (defined(my $tag = extract_tag(["parameter"], undef, \$classtag))) {
-						my $params = parse_params(\$tag);
-						my $p = (get_type(\$tag) || '') . ' ' . ($params->{"name"} || '');
-						$p =~ s/^\s+//gm;
-						$p =~ s/\s+$//gm;
-						push @parameters, $p if $p;
-					}
-					my $name = $params->{"name"};
-					my $type = get_type(\$tag);
-					my $meth = $type." ".$name." (".join(", ", @parameters).")";
-					$meth .= " [".join(",",true_params($params))."]" if true_params($params);
-					$meth =~ s/^\s+//gm;
-					$meth =~ s/\s+$//gm;
-					push @methods, $meth;
-					push @methodnames, $name;
-				}
+			Tag[] enumerations = ExtractTags (ref content, "enumeration");
 
-				# print STDERR $classtag."\n";
-
-				$classes{$params->{"name"}} = {
-					type => $class_or_interface,
-					properties => [@properties],
-					methods => [@methods],
-					propertynames => [@propertynames],
-					methodnames => [@methodnames]
-				};
+			foreach (Tag tag in enumerations) {
+				if (tag.Params.ContainsKey ("name")) {
+					Console.WriteLine ("Found " + tag.Tagname + ": " + tag.Params ["name"]);
+					yield return new UmlEnum (tag);
+				} else {
+					Console.WriteLine ("weird: " + tag.Content);
+				}
 			}
-			*/
 		}
 
 		public IEnumerable<IUmlObject> Parse (string filename)

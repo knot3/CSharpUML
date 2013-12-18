@@ -168,41 +168,55 @@ namespace CSharpUML
 			string typestr = type == ClassType.Interface ? "Schnittstelle" : "Klasse";
 			List<string> lines = new List<string> ();
 			lines.Add (@"\subsection{" + typestr + @" " + name + @"}");
+			
+			lines.Add (@"\begin{wrapfigure}{r}{9cm}" + "\n" + @"\centering");
+			lines.Add (@"\includegraphics[scale=0.5]{Klassen/" + Name.Clean () + @"}");
+			lines.Add (@"\end{wrapfigure}");
+
 			lines.Add (@"\paragraph{Beschreibung:}\mbox{}\\\\");
 			foreach (string cmt in Comments.GetComments(commentsKey)) {
 				lines.Add (cmt);
 			}
-			lines.Add(@"\setlength{\columnsep}{10pt}%");
-			lines.Add (@"\begin{wrapfigure}{R}{8cm}" + "\n" + @"\centering");
-			lines.Add (@"\includegraphics[scale=0.5]{Klassen/" + Name.Clean () + @"}");
-			//lines.Add(@"\includesvg[svgpath=./, width = 0.35\textwidth]{Klassen/" + Name.Clean () + @"}");
-//			lines.Add (@"\caption{\label{fig:" + Name.Clean () + @"}" + typestr + @" " + Name + @"}");
-			lines.Add (@"\end{wrapfigure}");
+			//lines.Add (@"\setlength{\columnsep}{10pt}%");
 			lines.Add ("\n");
 			IEnumerable<UmlAttribute> attributes = Content.OfType<UmlAttribute> ();
 			IEnumerable<UmlMethod> contructors = Content.OfType<UmlMethod> ().Where ((m) => m.Name == Name);
 			IEnumerable<UmlMethod> methods = Content.OfType<UmlMethod> ().Where ((m) => m.Name != Name);
 			if (attributes.Count () > 0) {
-				lines.Add (@"\paragraph{Eigenschaften:}\mbox{} \begin{description} "); //\\\\ \begin{tabular}{ll}");
+				lines.Add (@"\paragraph{Eigenschaften:}\mbox{} \\\\");
+				bool first = true;
 				foreach (UmlAttribute obj in attributes) {
+					if (!first)
+						lines.Add (@"~\\\\");
 					lines.Add (obj.ToTexCode ());
+					first = false;
 				}
-				lines.Add (@"\end{description}"); //\end{tabular}");
+				//lines.Add (@"\end{description}");
 			}
 			if (contructors.Count () > 0) {
-				lines.Add (@"\paragraph{Konstruktoren:}\mbox{} \begin{description} "); //\\\\ \begin{tabular}{ll}");
+				// lines.Add (@"\paragraph{Konstruktoren:}\mbox{} \begin{description} ");
+				lines.Add (@"\paragraph{Konstruktoren:}\mbox{} \\\\");
+				bool first = true;
 				foreach (UmlMethod obj in contructors) {
+					if (!first)
+						lines.Add (@"~\\\\");
 					obj.IsContructor = true;
 					lines.Add (obj.ToTexCode ());
+					first = false;
 				}
-				lines.Add (@"\end{description}"); //\end{tabular}");
+				//lines.Add (@"\end{description}");
 			}
 			if (methods.Count () > 0) {
-				lines.Add (@"\paragraph{Methoden:}\mbox{} \begin{description} "); //\\\\ \begin{tabular}{ll}");
+				// lines.Add (@"\paragraph{Methoden:}\mbox{} \begin{description} ");
+				lines.Add (@"\paragraph{Methoden:}\mbox{} \\\\");
+				bool first = true;
 				foreach (UmlMethod obj in methods) {
+					if (!first)
+						lines.Add (@"~\\\\");
 					lines.Add (obj.ToTexCode ());
+					first = false;
 				}
-				lines.Add (@"\end{description}"); //\end{tabular}");
+				// lines.Add (@"\end{description}");
 			}
 			return string.Join ("\n", lines).Replace ("<", "$<$").Replace (">", "$>$");
 		}

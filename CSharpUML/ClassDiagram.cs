@@ -15,7 +15,32 @@ namespace CSharpUML
 			this.objects = objects.ToArray ();
 		}
 
-		public IEnumerable<string> DotCode (string param = "")
+		private string EscapeLines (string line, int lineLength)
+		{
+			string[] parts = line.Trim().Split (" ");
+			string escaped = "";
+			bool first = true;
+			int length = 0;
+			foreach (string part in parts) {
+				if (!first) {
+					escaped += " ";
+					length += 1;
+				}
+				escaped += Escape (part);
+				length += part.Length;
+				first = false;
+
+				if (length > lineLength) {
+					escaped += "\\l";
+					length = 0;
+					first = true;
+				}
+			}
+			escaped += "\\l";
+			return escaped;
+		}
+
+		public IEnumerable<string> DotCode (string param = "", string backgroundColor = "", int lineLength = 80)
 		{
 			yield return "digraph \"MenuItem\"";
 			yield return "{";
@@ -24,12 +49,12 @@ namespace CSharpUML
 
 			foreach (IUmlObject obj in objects) {
 				string[] umlcode = obj.ToUmlCode ().Split ("\n").Where (
-					(l) => !l.Contains ("//") && !l.Contains("Attributes") && !l.Contains("Methods")
+					(l) => !l.Contains ("//") && !l.Contains ("Attributes") && !l.Contains ("Methods")
 				).ToArray ();
 				string code = "Box_" + obj.Name.Clean () + " [label=\"{" + Escape (obj.Name) + "\\n|";
 				for (int i = 1; i < umlcode.Length; ++i) {
 					if (UmlAttribute.Matches (new UmlBlock (name: umlcode [i], comments: new string[]{}))) {
-						code += Escape (umlcode [i]) + "\\l";
+						code += EscapeLines (umlcode [i], lineLength);
 					}
 				}
 				//if (i > 1 && i + 1 < umlcode.Length) {
@@ -37,11 +62,12 @@ namespace CSharpUML
 				//}
 				for (int i = 1; i < umlcode.Length; ++i) {
 					if (!UmlAttribute.Matches (new UmlBlock (name: umlcode [i], comments: new string[]{}))) {
-						code += Escape (umlcode [i]) + "\\l";
+						code += EscapeLines (umlcode [i], lineLength);
 					}
 				}
-				string color = obj is UmlClass && (obj as UmlClass).type == ClassType.Interface ?
-					"dafcda" : "fcfcda";
+				string color = backgroundColor != "" ? backgroundColor
+					: obj is UmlClass && (obj as UmlClass).type == ClassType.Interface ? "dafcda"
+					: "fcfcda";
 				code += "}\",height=0.2,width=0.4,color=\"black\", fillcolor=\"#" + color + "\"," + //
 					"style=\"filled\", fontcolor=\"black\"];\n";
 				yield return code;
