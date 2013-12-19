@@ -33,7 +33,7 @@ namespace CSharpUML
 				returntype = "";
 			name = name.TrimAll ();
 
-			commentsKey = Comments.Key (classobj.Name, name, parameters.Unique());
+			commentsKey = Comments.Key (classobj.Name, name, parameters.Unique ());
 		}
 
 		public UmlMethod (UmlBlock block, UmlClass classobj)
@@ -49,7 +49,7 @@ namespace CSharpUML
 				returntype = "";
 			}
 
-			Comments.AddTo (commentsKey = Comments.Key (classobj.Name, name, parameters.Unique()), block.comments);
+			Comments.AddTo (commentsKey = Comments.Key (classobj.Name, name, parameters.Unique ()), block.comments);
 		}
 
 		public UmlMethod (Tag tag, UmlClass classobj)
@@ -73,7 +73,7 @@ namespace CSharpUML
 			}
 			parameters = parameterlist.ToArray ();
 
-			commentsKey = Comments.Key (classobj.Name, name, parameters.Unique());
+			commentsKey = Comments.Key (classobj.Name, name, parameters.Unique ());
 		}
 
 		private void parseParams ()
@@ -148,6 +148,29 @@ namespace CSharpUML
 				uml += " : " + returntype;
 			uml += Virtuality.ToCode (" ", "");
 			lines.Add (uml);
+			return string.Join ("\n", lines);
+		}
+
+		public override string ToCSharpCode (int padding = 0)
+		{
+			return ToCSharpCode(padding, Virtuality.None);
+		}
+
+		public string ToCSharpCode (int padding, Virtuality virt)
+		{
+			if (virt == CSharpUML.Virtuality.None)
+				virt = Virtuality;
+			string paddingStr = String.Concat (Enumerable.Repeat (" ", padding));
+			List<string> lines = new List<string> ();
+			lines.AddRange (Comments.CSharpComments (commentsKey, paddingStr));
+			string uml = paddingStr + Publicity.ToCode ("", " ") + virt.ToCode ("", " ")
+				+ (returntype.Length > 0 ? returntype : "void") + " "
+				+ name + " ("
+				+ string.Join (", ", parameters) + ")";
+			lines.Add (uml);
+			lines.Add (paddingStr + "{");
+			lines.Add (paddingStr + "    " + "throw new System.NotImplementedException();");
+			lines.Add (paddingStr + "}");
 			return string.Join ("\n", lines);
 		}
 

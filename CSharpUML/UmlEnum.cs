@@ -17,6 +17,7 @@ namespace CSharpUML
 			values = ParseContent (block.Content).ToArray ();
 
 			commentsKey = Comments.Key (name);
+			Packages.AddToCurrentPackage (name);
 		}
 
 		public UmlEnum (UmlBlock block)
@@ -24,8 +25,12 @@ namespace CSharpUML
 		{
 			name = name.IfContains ("enum ", () => {});
 			values = ParseContent (block.Content).ToArray ();
+			
+			string _name = name;
+			Packages.SplitName (_name, out Packages.CurrentPackage, out name);
 
 			Comments.AddTo (commentsKey = Comments.Key (name), block.comments);
+			Packages.AddToCurrentPackage (name);
 		}
 
 		public UmlEnum (Tag tag)
@@ -47,6 +52,7 @@ namespace CSharpUML
 			values = literals.ToArray ();
 
 			commentsKey = Comments.Key (name);
+			Packages.AddToCurrentPackage (name);
 		}
 
 		public IEnumerable<string> ParseContent (IEnumerable<CSharpBlock> blocks)
@@ -82,11 +88,44 @@ namespace CSharpUML
 			string paddingStr = String.Concat (Enumerable.Repeat (" ", padding));
 			List<string> lines = new List<string> ();
 			lines.AddRange (Comments.PrintComments (commentsKey, paddingStr));
-			lines.Add (paddingStr + Publicity.ToCode ("", " ") + Virtuality.ToCode ("", " ") + "enum " + name);
+			string nameWithPackage = Packages.IsInPackage (name) ? Packages.GetPackage (name) + "." + name : name;
+			lines.Add (paddingStr + Publicity.ToCode ("", " ") + Virtuality.ToCode ("", " ") + "enum " + nameWithPackage);
 			foreach (string literal in values) {
 				lines.AddRange (Comments.PrintComments (Comments.Key (literal), paddingStr + "    "));
 				lines.Add (paddingStr + "    " + literal);
 			}
+			return string.Join ("\n", lines);
+		}
+
+		public override string ToCSharpCode (int padding = 0)
+		{
+			string paddingStr = String.Concat (Enumerable.Repeat (" ", padding));
+			List<string> lines = new List<string> ();
+
+			lines.AddRange (Packages.GetUsingStatements (Packages.GetPackage (name)));
+			
+			if (Packages.IsInPackage (name)) {
+				lines.Add (paddingStr + "namespace " + Packages.GetPackage (name));
+				lines.Add (paddingStr + "{");
+				paddingStr += "    ";
+				padding += 4;
+			}
+
+			lines.AddRange (Comments.CSharpComments (commentsKey, paddingStr));
+			lines.Add (paddingStr + Publicity.ToCode ("", " ") + Virtuality.ToCode ("", " ") + "enum " + name);
+			lines.Add (paddingStr + "{");
+			foreach (string literal in values) {
+				lines.AddRange (Comments.CSharpComments (Comments.Key (literal), paddingStr + "    "));
+				lines.Add (paddingStr + "    " + literal + ",");
+			}
+			lines.Add (paddingStr + "}");
+
+			if (Packages.IsInPackage (name)) {
+				padding -= 4;
+				paddingStr = paddingStr.Substring (4);
+				lines.Add (paddingStr + "}");
+			}
+
 			return string.Join ("\n", lines);
 		}
 

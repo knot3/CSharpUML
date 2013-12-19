@@ -58,6 +58,8 @@ namespace CSharpUML
 
 		public abstract string ToUmlCode (int padding = 0);
 
+		public abstract string ToCSharpCode (int padding = 0);
+
 		public abstract string ToTexCode ();
 
 		public override bool Equals (object obj)

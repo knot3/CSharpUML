@@ -41,6 +41,15 @@ namespace CSharpUML
 		public IEnumerable<IUmlObject> Parse (IEnumerable<string> lines)
 		{
 			string content = String.Join (" ", lines);
+
+			string packagename = "";
+			if (content.Contains ("<package")) {
+				Tag[] packages = ExtractTags(ref content, "package");
+				if (packages.Length > 0) {
+					packagename = packages[0].Name;
+					content = packages[0].Content;
+				}
+			}
 			
 			// Console.WriteLine ("content: " + content);
 			content = content.RegexReplace (@"[\r\n\s]+", " ");
@@ -53,6 +62,7 @@ namespace CSharpUML
 			foreach (Tag tag in classes) {
 				if (tag.Params.ContainsKey ("name")) {
 					Console.WriteLine ("Found " + tag.Tagname + ": " + tag.Params ["name"]);
+					Packages.CurrentPackage = packagename;
 					yield return new UmlClass (tag);
 				} else {
 					Console.WriteLine ("weird: " + tag.Content);
@@ -64,6 +74,7 @@ namespace CSharpUML
 			foreach (Tag tag in enumerations) {
 				if (tag.Params.ContainsKey ("name")) {
 					Console.WriteLine ("Found " + tag.Tagname + ": " + tag.Params ["name"]);
+					Packages.CurrentPackage = packagename;
 					yield return new UmlEnum (tag);
 				} else {
 					Console.WriteLine ("weird: " + tag.Content);

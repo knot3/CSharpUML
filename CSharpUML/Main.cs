@@ -47,7 +47,7 @@ namespace CSharpUML
 
 				case Processing.UmlToCode:
 					// uml code -> c# code
-					Uml2Code (extra, target.Length > 0 ? target : "gen");
+					Uml2Code (extra, target.Length > 0 ? target : "codegen");
 					break;
 
 				case Processing.UmlToDiagram:
@@ -99,28 +99,26 @@ namespace CSharpUML
 			}
 		}
 
-		private static void Uml2Code (IEnumerable<string> paths, string target)
+		private static void Uml2Code (IEnumerable<string> paths, string _target)
 		{
 			foreach (string path in paths) {
+				string target = _target.Length > 0 ? _target + "/" : path + "/codegen/";
+
 				Console.WriteLine (path);
+				List<IUmlObject> objects = new List<IUmlObject> ();
 				Action<string> processFile = (filename) => {
 					IParser parser = new UmlParser ();
-					IEnumerable<IUmlObject> objects = parser.Parse (filename);
-					List<string> lines = new List<string> ();
-					foreach (IUmlObject obj in objects) {
-						lines.Add (obj.ToUmlCode () + "\n");
-					}
-					string genfile = filename.Replace (".uml", ".cs")
-								.Replace ("/uml/", "/");
-					if (target.Length > 0) {
-						genfile = genfile.ReplaceFirst (path, target + "/");
-					} else {
-						genfile = genfile.ReplaceFirst (path, path + "/gen/");
-					}
-					Console.WriteLine ("Write: " + genfile);
-					Files.WriteLines (genfile, lines);
+					objects.AddRange (parser.Parse (filename));
 				};
 				Files.SearchFiles (path, new string[]{".uml"}, processFile);
+
+				foreach (IUmlObject obj in objects) {
+					List<string> lines = new List<string> ();
+					lines.Add (obj.ToCSharpCode () + "\n");
+					string genfile = target + Packages.GetPackage (obj.Name).Replace (".", "/") + "/" + obj.Name.Clean () + ".cs";
+					Console.WriteLine ("Write: " + genfile);
+					Files.WriteLines (genfile, lines);
+				}
 			}
 		}
 

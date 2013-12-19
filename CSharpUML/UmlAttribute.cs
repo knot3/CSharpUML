@@ -100,6 +100,24 @@ namespace CSharpUML
 			return string.Join ("\n", lines);
 		}
 
+		public override string ToCSharpCode (int padding = 0)
+		{
+			return ToCSharpCode(padding, Virtuality.None);
+		}
+
+		public string ToCSharpCode (int padding, Virtuality virt)
+		{
+			if (virt == CSharpUML.Virtuality.None)
+				virt = Virtuality;
+			string paddingStr = String.Concat (Enumerable.Repeat (" ", padding));
+			List<string> lines = new List<string> ();
+			lines.AddRange (Comments.CSharpComments (commentsKey, paddingStr));
+			string uml = paddingStr + Publicity.ToCode ("", " ") + Virtuality.ToCode ("", " ")
+				+ type + " " + name + " { get; set; }";
+			lines.Add (uml);
+			return string.Join ("\n", lines);
+		}
+
 		public override string ToTexCode ()
 		{
 			List<string> lines = new List<string> ();

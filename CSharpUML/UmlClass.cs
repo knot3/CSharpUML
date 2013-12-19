@@ -36,6 +36,7 @@ namespace CSharpUML
 			}
 
 			commentsKey = Comments.Key (name);
+			Packages.AddToCurrentPackage (name);
 		}
 
 		public UmlClass (UmlBlock block)
@@ -57,22 +58,38 @@ namespace CSharpUML
 
 			Content = ParseContent (block.Content).ToArray ();
 
+			string _name = name;
+			Packages.SplitName (_name, out Packages.CurrentPackage, out name);
+
 			Comments.AddTo (commentsKey = Comments.Key (name), block.comments);
+			Packages.AddToCurrentPackage (name);
 		}
 
-		public UmlClass (Tag tag)
-			: base(tag)
+		public UmlClass (Tag classtag)
+			: base(classtag)
 		{
-			if (tag.Tagname == "interface")
+			if (classtag.Tagname == "interface")
 				type = ClassType.Interface;
 			else
 				type = ClassType.Class;
 
-			Content = ParseContent (tag).ToArray ();
-			bases = new string[]{};
+			Content = ParseContent (classtag).ToArray ();
 			Publicity = Publicity.Public;
 
+			List<string> _bases = new List<string> ();
+			Tag[] baseclasses = VSParser.ExtractTags (ref classtag.Content, "generalization");
+			foreach (Tag baseclass in baseclasses) {
+				_bases.Add (baseclass.ParseType ());
+			}
+			Tag[] baseinterfaces = VSParser.ExtractTags (ref classtag.Content, "interfaceRealization");
+			foreach (Tag baseinterface in baseinterfaces) {
+				_bases.Add (baseinterface.ParseType ());
+			}
+
+			bases = _bases.ToArray ();
+
 			commentsKey = Comments.Key (name);
+			Packages.AddToCurrentPackage (name);
 		}
 
 		public IEnumerable<IUmlObject> ParseContent (IEnumerable<CSharpBlock> blocks)
@@ -140,9 +157,10 @@ namespace CSharpUML
 			string paddingStr = String.Concat (Enumerable.Repeat (" ", padding));
 			List<string> lines = new List<string> ();
 			lines.AddRange (Comments.PrintComments (commentsKey, paddingStr));
+			string nameWithPackage = Packages.IsInPackage (name) ? Packages.GetPackage (name) + "." + name : name;
 			lines.Add (
 				paddingStr + Publicity.ToCode ("", " ") + Virtuality.ToCode ("", " ") + type.ToCode ("", " ")
-				+ name
+				+ nameWithPackage
 				+ " : " + string.Join (", ", bases)
 			);
 			lines.Add (paddingStr + "  Attributes:");
@@ -157,6 +175,78 @@ namespace CSharpUML
 					lines.Add (obj.ToUmlCode (padding + 4));
 				}
 			}
+			return string.Join ("\n", lines);
+		}
+
+		public override string ToCSharpCode (int padding = 0)
+		{
+			string paddingStr = String.Concat (Enumerable.Repeat (" ", padding));
+			List<string> lines = new List<string> ();
+
+			lines.AddRange (Packages.GetUsingStatements (Packages.GetPackage (name)));
+			
+			if (Packages.IsInPackage (name)) {
+				lines.Add (paddingStr + "namespace " + Packages.GetPackage (name));
+				lines.Add (paddingStr + "{");
+				paddingStr += "    ";
+				padding += 4;
+			}
+			
+			lines.AddRange (Comments.CSharpComments (commentsKey, paddingStr));
+			lines.Add (
+				paddingStr + Publicity.ToCode ("", " ") + Virtuality.ToCode ("", " ") + type.ToCode ("", " ")
+				+ name
+				+ " : " + string.Join (", ", bases)
+			);
+			lines.Add (paddingStr + "{");
+			lines.Add ("");
+
+			IEnumerable<UmlAttribute> attributes = Content.OfType<UmlAttribute> ();
+			IEnumerable<UmlMethod> contructors = Content.OfType<UmlMethod> ().Where ((m) => m.Name == Name);
+			IEnumerable<UmlMethod> methods = Content.OfType<UmlMethod> ().Where ((m) => m.Name != Name);
+
+			if (attributes.Count () > 0) {
+				lines.Add (paddingStr + "    #region Properties");
+				lines.Add ("");
+				foreach (UmlAttribute obj in attributes) {
+					lines.Add (obj.ToCSharpCode (padding + 4, Virtuality.Virtual));
+					lines.Add ("");
+				}
+				lines.Add (paddingStr + "    #endregion");
+				lines.Add ("");
+			}
+
+			if (contructors.Count () > 0) {
+				lines.Add (paddingStr + "    #region Constructors");
+				lines.Add ("");
+				foreach (UmlMethod obj in contructors) {
+					obj.IsContructor = true;
+					lines.Add (obj.ToCSharpCode (padding + 4));
+					lines.Add ("");
+				}
+				lines.Add (paddingStr + "    #endregion");
+				lines.Add ("");
+			}
+
+			if (methods.Count () > 0) {
+				lines.Add (paddingStr + "    #region Methods");
+				lines.Add ("");
+				foreach (UmlMethod obj in methods) {
+					lines.Add (obj.ToCSharpCode (padding + 4, Virtuality.Virtual));
+					lines.Add ("");
+				}
+				lines.Add (paddingStr + "    #endregion");
+				lines.Add ("");
+			}
+
+			lines.Add (paddingStr + "}");
+
+			if (Packages.IsInPackage (name)) {
+				padding -= 4;
+				paddingStr = paddingStr.Substring (4);
+				lines.Add (paddingStr + "}");
+			}
+
 			return string.Join ("\n", lines);
 		}
 

@@ -9,18 +9,27 @@ namespace CSharpUML
 		private static List<string> currentComments = new List<string> ();
 		public static Dictionary<string, List<string>> CommentMap = new Dictionary<string, List<string>> ();
 
-		public static string Key (string name)
+		public static string Key (string _name)
 		{
+			string dummy = "";
+			string name = "";
+			Packages.SplitName (_name, out dummy, out name);
 			return name;
 		}
 
-		public static string Key (string name1, string name2, string subid)
+		public static string Key (string _name1, string name2, string subid)
 		{
-			return name1 + "." + name2+":"+subid;
+			string dummy = "";
+			string name1 = "";
+			Packages.SplitName (_name1, out dummy, out name1);
+			return name1 + "." + name2 + ":" + subid;
 		}
 
-		public static string Key (string name1, string name2)
+		public static string Key (string _name1, string name2)
 		{
+			string dummy = "";
+			string name1 = "";
+			Packages.SplitName (_name1, out dummy, out name1);
 			return name1 + "." + name2;
 		}
 
@@ -71,9 +80,24 @@ namespace CSharpUML
 			}
 		}
 
+		public static IEnumerable<string> CSharpComments (string name, string padding)
+		{
+			if (HasComments (name)) {
+				yield return padding + "/// <summary>";
+				foreach (string cmt in CommentMap [name]) {
+					if (cmt.Length > 0)
+						Console.WriteLine ("Comment[" + name + "] = " + cmt);
+					yield return padding + "/// " + cmt;
+				}
+				yield return padding + "/// </summary>";
+			} else {
+				yield break;
+			}
+		}
+
 		public static bool HasComments (string name)
 		{
-			return name != null && CommentMap.ContainsKey (name) && CommentMap[name].Count > 0;
+			return name != null && CommentMap.ContainsKey (name) && CommentMap [name].Count > 0;
 		}
 	}
 }

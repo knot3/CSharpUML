@@ -60,6 +60,7 @@
     <Compile Include="GraphViz.cs" />
     <Compile Include="VSParser.cs" />
     <Compile Include="Comments.cs" />
+    <Compile Include="Packages.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
