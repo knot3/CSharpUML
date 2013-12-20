@@ -167,7 +167,11 @@ namespace CSharpUML
                 + ((inClass != null && inClass.type == ClassType.Interface)
                 ? ""
                 : Publicity.ToCode("", " ") + virt.ToCode("", " "));
-            uml += (IsContructor ? "" : returntype.Length > 0 ? returntype.ToSharpType() : "void") + " ";
+            string _returntype = Comments.GetCommentParameter(commentsKey, "returntype");
+            if (_returntype.Length > 0)
+                uml += _returntype.ToSharpType() + " ";
+            else
+                uml += (IsContructor ? "" : returntype.Length > 0 ? returntype.ToSharpType() : "void") + " ";
             uml += name;
             if (name == "this")
             {
@@ -181,17 +185,25 @@ namespace CSharpUML
             else
             {
                 uml += " (";
-                for (int i = 0; i < parameters.Length; ++i)
+                string _parameters = Comments.GetCommentParameter(commentsKey, "parameters");
+                if (_parameters.Length > 0)
                 {
-                    if (i > 0)
-                        uml += ", ";
-                    if (parameters[i].Contains(" "))
+                    uml += _parameters;
+                }
+                else
+                {
+                    for (int i = 0; i < parameters.Length; ++i)
                     {
-                        String[] p = parameters[i].Split(new char[]{' '}, 2);
-                        uml += p[0].ToSharpType()+" " +p[1];
+                        if (i > 0)
+                            uml += ", ";
+                        if (parameters[i].Contains(" "))
+                        {
+                            String[] p = parameters[i].Split(new char[] { ' ' }, 2);
+                            uml += p[0].ToSharpType() + " " + p[1];
+                        }
+                        else
+                            uml += parameters[i].ToSharpType() + " " + parameters[i].ToLower();
                     }
-                    else
-                        uml += parameters[i].ToSharpType() + " " + parameters[i].ToLower();
                 }
                 uml += ")";
                 if (uml.Contains("ModelFactory") && uml.Contains("Func<"))
