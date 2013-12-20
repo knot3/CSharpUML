@@ -33,7 +33,7 @@ namespace CSharpUML
 				returntype = "";
 			name = name.TrimAll ();
 
-			commentsKey = Comments.Key (classobj.Name, name, parameters.Unique ());
+			commentsKey = Comments.Key (classobj.Name, name, parameters.Unique () + returntype);
 		}
 
 		public UmlMethod (UmlBlock block, UmlClass classobj)
@@ -49,7 +49,8 @@ namespace CSharpUML
 				returntype = "";
 			}
 
-			Comments.AddTo (commentsKey = Comments.Key (classobj.Name, name, parameters.Unique ()), block.comments);
+			Comments.AddTo (commentsKey = Comments.Key (classobj.Name, name, parameters.Unique () + returntype),
+			                block.comments);
 		}
 
 		public UmlMethod (Tag tag, UmlClass classobj)
@@ -73,7 +74,7 @@ namespace CSharpUML
 			}
 			parameters = parameterlist.ToArray ();
 
-			commentsKey = Comments.Key (classobj.Name, name, parameters.Unique ());
+			commentsKey = Comments.Key (classobj.Name, name, parameters.Unique () + returntype);
 		}
 
 		private void parseParams ()
@@ -163,16 +164,32 @@ namespace CSharpUML
 			string paddingStr = String.Concat (Enumerable.Repeat (" ", padding));
 			List<string> lines = new List<string> ();
 			lines.AddRange (Comments.CSharpComments (commentsKey, paddingStr));
-			string uml = paddingStr
-				+ ((inClass != null && inClass.type == ClassType.Interface)
-                ? ""
-                : Publicity.ToCode ("", " ") + virt.ToCode ("", " "));
+			string uml = paddingStr;
+
+			// public, virtual
+			string _keywords = Comments.GetCommentParameter (commentsKey, "keywords");
+			if (_keywords != null)
+				uml += _keywords.TrimAll ().ToCode ("", " ");
+			else if (inClass != null && inClass.type == ClassType.Interface)
+				uml += "";
+			else
+				uml += Publicity.ToCode ("", " ") + virt.ToCode ("", " ");
+
+			// return type
 			string _returntype = Comments.GetCommentParameter (commentsKey, "returntype");
-			if (_returntype.Length > 0)
+			if (_returntype != null)
 				uml += _returntype.ToSharpType () + " ";
 			else
-				uml += (IsContructor ? "" : returntype.Length > 0 ? returntype.ToSharpType () : "void") + " ";
-			uml += name;
+				uml += (IsContructor ? "" : returntype.Length > 0 ? returntype.ToSharpType () : "void").ToCode ("", " ");
+
+			// name
+			string _name = Comments.GetCommentParameter (commentsKey, "name");
+			if (_name != null)
+				uml += _name;
+			else
+				uml += name;
+
+			// index operator [ ]
 			if (name == "this") {
 				uml += " [" + string.Join (", ", parameters) + "]";
 				lines.Add (uml);
@@ -180,10 +197,12 @@ namespace CSharpUML
 				lines.Add (paddingStr + "    " + "get { throw new System.NotImplementedException(); }");
 				lines.Add (paddingStr + "    " + "set { throw new System.NotImplementedException(); }");
 				lines.Add (paddingStr + "}");
-			} else {
+			}
+			// normal method
+			else {
 				uml += " (";
 				string _parameters = Comments.GetCommentParameter (commentsKey, "parameters");
-				if (_parameters.Length > 0) {
+				if (_parameters != null) {
 					uml += _parameters;
 				} else {
 					for (int i = 0; i < parameters.Length; ++i) {
@@ -199,10 +218,15 @@ namespace CSharpUML
 				uml += ")";
 				if (uml.Contains ("ModelFactory") && uml.Contains ("Func<"))
 					uml = paddingStr + "public ModelFactory (Func<GameScreen, GameModelInfo, GameModel> createModel)";
-				lines.Add (uml);
-				lines.Add (paddingStr + "{");
-				lines.Add (paddingStr + "    " + "throw new System.NotImplementedException();");
-				lines.Add (paddingStr + "}");
+
+				if (inClass.type == ClassType.Interface) {
+					lines.Add (uml + ";");
+				} else {
+					lines.Add (uml);
+					lines.Add (paddingStr + "{");
+					lines.Add (paddingStr + "    " + "throw new System.NotImplementedException();");
+					lines.Add (paddingStr + "}");
+				}
 			}
 			return string.Join ("\n", lines);
 		}

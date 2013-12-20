@@ -89,5 +89,13 @@ namespace CSharpUML
 		{
 			return Regex.Replace (str, find, replacement);
 		}
+
+		public static string ToCode (this string str, string before, string after)
+		{
+			if (str.Length > 0)
+				return before + str + after;
+			else
+				return str;
+		}
 	}
 }

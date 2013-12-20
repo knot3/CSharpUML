@@ -25,7 +25,7 @@ namespace CSharpUML
 					tags.Add (new Tag (tagname: tagname, content: tagcontent));
 				}
 
-				matches = Regex.Matches (content, @"([<]" + tagname + @"[ >])([^>]*?" + "\"" + @">.*?)([<]/" + tagname + @"[>])");
+				matches = Regex.Matches (content, @"([<]" + tagname + @"[ >])([^>]*?" + "[\"=]" + @">.*?)([<]/" + tagname + @"[>])");
 				Console.WriteLine ("match: " + @"([<]" + tagname + @"[ >])(.*?)([<]/" + tagname + @"[>])");
 				Console.WriteLine ("matches: " + matches.Count);
 

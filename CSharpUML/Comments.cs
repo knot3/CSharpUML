@@ -88,7 +88,7 @@ namespace CSharpUML
 					return cmt.Split ("=") [1].Split ("]") [0];
 				}
 			}
-			return "";
+			return null;
 		}
 
 		public static IEnumerable<string> CSharpComments (string name, string padding)

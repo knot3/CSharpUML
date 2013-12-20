@@ -82,7 +82,9 @@ namespace CSharpUML
 				_bases.Add (baseclass.ParseType ());
 			}
 			Tag[] baseinterfaces = VSParser.ExtractTags (ref classtag.Content, "interfaceRealization");
+				Console.WriteLine ("interfaceRealization: " + name + ": " + classtag.Content);
 			foreach (Tag baseinterface in baseinterfaces) {
+				Console.WriteLine ("interfaceRealization: " + name + " <- " + baseinterface.Content);
 				_bases.Add (baseinterface.ParseType ());
 			}
 

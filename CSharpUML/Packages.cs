@@ -81,6 +81,7 @@ namespace CSharpUML
 			HashSet<string> exclude = new HashSet<string> (_exclude);
 			string[] dotnet = new string[] {
 				"System",
+				"System.Collections",
 				"System.Collections.Generic",
 				"System.Linq"
 			};
