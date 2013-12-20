@@ -102,18 +102,21 @@ namespace CSharpUML
 
 		public override string ToCSharpCode (int padding = 0)
 		{
-			return ToCSharpCode(padding, Virtuality.None);
+			return ToCSharpCode(padding, Virtuality.None, null);
 		}
 
-		public string ToCSharpCode (int padding, Virtuality virt)
+        public string ToCSharpCode(int padding, Virtuality virt, UmlClass inClass)
 		{
 			if (virt == CSharpUML.Virtuality.None)
 				virt = Virtuality;
 			string paddingStr = String.Concat (Enumerable.Repeat (" ", padding));
 			List<string> lines = new List<string> ();
-			lines.AddRange (Comments.CSharpComments (commentsKey, paddingStr));
-			string uml = paddingStr + Publicity.ToCode ("", " ") + Virtuality.ToCode ("", " ")
-				+ type + " " + name + " { get; set; }";
+            lines.AddRange(Comments.CSharpComments(commentsKey, paddingStr));
+            string uml = paddingStr
+                + ((inClass != null && inClass.type == ClassType.Interface)
+                ? ""
+                : Publicity.ToCode("", " ") + Virtuality.ToCode("", " "));
+			uml += type.ToSharpType() + " " + name + " { get; set; }";
 			lines.Add (uml);
 			return string.Join ("\n", lines);
 		}

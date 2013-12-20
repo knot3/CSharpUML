@@ -248,28 +248,54 @@ namespace CSharpUML
 				    lines.Add (obj.ToTexCode ());
 				    lines.Add ("");
 			    }
-			 }
+			}
 			
             Files.WriteLines (target, lines);
 
-			foreach (UmlClass obj in allObjects.OfType<UmlClass>()) {
-				// write class diagram
-				ClassDiagram dia = new ClassDiagram (new IUmlObject[]{ obj });
-				string filename = Path.GetDirectoryName (target) + "/Klassen/" + obj.Name.Clean ();
-				Files.WriteLines (filename + ".dot", dia.DotCode ("", "ffffff", 80));
-				//GraphViz.Dot ("svg", filename + ".dot", filename + ".svg");
-				//GraphViz.Dot ("jpg", filename + ".dot", filename + ".jpg");
-				//GraphViz.Dot ("png", filename + ".dot", filename + ".png");
-				GraphViz.Dot ("svg", filename + ".dot", filename + ".svg");
-				GraphViz.Convert ("-density 100", "svg:" + filename + ".svg", filename + ".png");
-			}
+            lines.Clear();
+
+            newCommand(ref lines, "CountClasses", "" + allObjects.OfType<UmlClass>()
+                .Where((o) => o.type == ClassType.Class).Count());
+            newCommand(ref lines, "CountInterfaces", "" + allObjects.OfType<UmlClass>()
+                .Where((o) => o.type == ClassType.Interface).Count());
+            newCommand(ref lines, "CountEnums", "" + allObjects.OfType<UmlEnum>()
+                .Count());
+
+            Files.WriteLines(Path.GetDirectoryName(target)+"/Definitionen.gentex", lines);
+
+
+            if (IsRunningOnMono())
+            {
+                foreach (UmlClass obj in allObjects.OfType<UmlClass>())
+                {
+                    // write class diagram
+                    ClassDiagram dia = new ClassDiagram(new IUmlObject[] { obj });
+                    string filename = Path.GetDirectoryName(target) + "/Klassen/" + obj.Name.Clean();
+                    Files.WriteLines(filename + ".dot", dia.DotCode("", "ffffff", 80));
+                    //GraphViz.Dot ("svg", filename + ".dot", filename + ".svg");
+                    //GraphViz.Dot ("jpg", filename + ".dot", filename + ".jpg");
+                    //GraphViz.Dot ("png", filename + ".dot", filename + ".png");
+                    GraphViz.Dot("svg", filename + ".dot", filename + ".svg");
+                    GraphViz.Convert("-density 100", "svg:" + filename + ".svg", filename + ".png");
+                }
+            }
 		}
+
+        private static void newCommand(ref List<string> lines, string cmd, string content)
+        {
+            lines.Add(@"\newcommand{\"+cmd+@"}{"+content+@"}");
+        }
 
 		private static bool IsBlacklisted (string name)
 		{
 			return name.Length == 1 || name.StartsWith ("XNA") || name.Contains ("IEnumerable")
 				|| name.Contains ("IEquatable") || name.Contains ("ICloneable");
 		}
+
+        public static bool IsRunningOnMono()
+        {
+            return Type.GetType("Mono.Runtime") != null;
+        }
 	}
 
 	enum Processing

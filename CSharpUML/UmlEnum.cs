@@ -133,12 +133,12 @@ namespace CSharpUML
 		{
 			List<string> lines = new List<string> ();
 			lines.Add (@"\subsubsection{Enumeration " + name + @"}");
-			lines.Add (@"\paragraph{Beschreibung:}\mbox{}\\\\");
+            lines.Add(@"\paragraph{Beschreibung:}\mbox{}\newline\newline");
 			foreach (string cmt in Comments.GetComments(commentsKey)) {
 				lines.Add (cmt);
 			}
 			lines.Add ("\n");
-			lines.Add (@"\paragraph{Eigenschaften:}\mbox{} \\\\");
+			lines.Add (@"\paragraph{Eigenschaften:}\mbox{} \newline\newline");
 			foreach (string _literal in values) {
 				string literal = _literal;
 				if (literal.Contains ("=")) {
@@ -147,7 +147,7 @@ namespace CSharpUML
 				} else {
 					literal = @"\ptype{" + literal + "}";
 				}
-				lines.Add (@"\textbf{" + literal + @"}\\~\\");
+                lines.Add(@"\textbf{" + literal + @"}\newline\newline");
 				foreach (string cmt in Comments.GetComments(Comments.Key(name, _literal))) {
 					lines.Add (cmt);
 				}

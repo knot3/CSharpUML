@@ -153,19 +153,22 @@ namespace CSharpUML
 
 		public override string ToCSharpCode (int padding = 0)
 		{
-			return ToCSharpCode(padding, Virtuality.None);
+			return ToCSharpCode(padding, Virtuality.None, null);
 		}
 
-		public string ToCSharpCode (int padding, Virtuality virt)
+		public string ToCSharpCode (int padding, Virtuality virt, UmlClass inClass)
 		{
 			if (virt == CSharpUML.Virtuality.None)
 				virt = Virtuality;
 			string paddingStr = String.Concat (Enumerable.Repeat (" ", padding));
 			List<string> lines = new List<string> ();
-			lines.AddRange (Comments.CSharpComments (commentsKey, paddingStr));
-			string uml = paddingStr + Publicity.ToCode ("", " ") + virt.ToCode ("", " ")
-				+ (IsContructor ? "" : returntype.Length > 0 ? returntype : "void") + " "
-                + name;
+            lines.AddRange(Comments.CSharpComments(commentsKey, paddingStr));
+            string uml = paddingStr
+                + ((inClass != null && inClass.type == ClassType.Interface)
+                ? ""
+                : Publicity.ToCode("", " ") + virt.ToCode("", " "));
+            uml += (IsContructor ? "" : returntype.Length > 0 ? returntype.ToSharpType() : "void") + " ";
+            uml += name;
             if (name == "this")
             {
                 uml += " [" + string.Join(", ", parameters) + "]";
@@ -183,11 +186,15 @@ namespace CSharpUML
                     if (i > 0)
                         uml += ", ";
                     if (parameters[i].Contains(" "))
-                        uml += parameters[i];
-
+                    {
+                        String[] p = parameters[i].Split(new char[]{' '}, 2);
+                        uml += p[0].ToSharpType()+" " +p[1];
+                    }
+                    else
+                        uml += parameters[i].ToSharpType() + " " + parameters[i].ToLower();
                 }
                 uml += ")";
-                if (uml.Contains("ModelFactory (GameModelInfo, GameModel>, Func<GameScreen createModel)"))
+                if (uml.Contains("ModelFactory") && uml.Contains("Func<"))
                     uml = paddingStr + "public ModelFactory (Func<GameScreen, GameModelInfo, GameModel> createModel)";
                 lines.Add(uml);
                 lines.Add(paddingStr + "{");

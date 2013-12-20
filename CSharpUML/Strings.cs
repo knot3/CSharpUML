@@ -17,6 +17,12 @@ namespace CSharpUML
 			return s.Trim (' ', '\r', '\n', '\t');
 		}
 
+        public static string ToSharpType(this string s)
+		{
+			return s.Replace("Integer", "int").Replace("String", "string")
+                .Replace("XNA.", "");
+		}
+
 		public static IEnumerable<string> TrimAll (this IEnumerable<string> strings)
 		{
 			foreach (string s in strings) {

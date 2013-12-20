@@ -191,12 +191,12 @@ namespace CSharpUML
 				paddingStr += "    ";
 				padding += 4;
 			}
-			
+
 			lines.AddRange (Comments.CSharpComments (commentsKey, paddingStr));
 			lines.Add (
 				paddingStr + Publicity.ToCode ("", " ") + Virtuality.ToCode ("", " ") + type.ToCode ("", " ")
 				+ name
-				+ (bases.Length > 0 ? " : " + string.Join (", ", bases) : "")
+				+ (bases.Length > 0 ? " : " + string.Join (", ", bases).Replace("XNA.", "") : "")
 			);
 			lines.Add (paddingStr + "{");
 			lines.Add ("");
@@ -209,7 +209,7 @@ namespace CSharpUML
 				lines.Add (paddingStr + "    #region Properties");
 				lines.Add ("");
 				foreach (UmlAttribute obj in attributes) {
-					lines.Add (obj.ToCSharpCode (padding + 4, Virtuality.Virtual));
+					lines.Add (obj.ToCSharpCode (padding + 4, Virtuality.Virtual, this));
 					lines.Add ("");
 				}
 				lines.Add (paddingStr + "    #endregion");
@@ -221,7 +221,7 @@ namespace CSharpUML
 				lines.Add ("");
 				foreach (UmlMethod obj in contructors) {
 					obj.IsContructor = true;
-					lines.Add (obj.ToCSharpCode (padding + 4));
+					lines.Add (obj.ToCSharpCode (padding + 4, Virtuality.None, this));
 					lines.Add ("");
 				}
 				lines.Add (paddingStr + "    #endregion");
@@ -232,7 +232,7 @@ namespace CSharpUML
 				lines.Add (paddingStr + "    #region Methods");
 				lines.Add ("");
 				foreach (UmlMethod obj in methods) {
-					lines.Add (obj.ToCSharpCode (padding + 4, Virtuality.Virtual));
+                    lines.Add(obj.ToCSharpCode(padding + 4, Virtuality.Virtual, this));
 					lines.Add ("");
 				}
 				lines.Add (paddingStr + "    #endregion");
