@@ -1,4 +1,4 @@
-CSharpUML/CSharpUML-Linux.userprefsusing System;
+using System;
 using System.Collections.Generic;
 
 using NDesk.Options;
