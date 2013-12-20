@@ -259,7 +259,7 @@ namespace CSharpUML
 			List<string> lines = new List<string> ();
 			lines.Add (@"\subsubsection{" + typestr + @" " + name + @"}\index{"+Packages.GetPackage(name)+"!"+name+"}");
 			
-			lines.Add (@"\begin{wrapfigure}{r}{9cm}{0}" + "\n" + @"\centering");
+			lines.Add (@"\begin{wrapfigure}{R}{9cm}{0}" + "\n" + @"\centering");
 			lines.Add (@"\includegraphics[scale=0.5]{Klassen/" + Name.Clean () + @"}");
 			lines.Add (@"\end{wrapfigure}");
 
