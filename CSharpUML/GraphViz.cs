@@ -11,8 +11,8 @@ namespace CSharpUML
 				var info = new ProcessStartInfo (
 					"dot", "-T" + format + " -o'" + output + "' '" + input + "'" //+ " -Gdpi=300"
 				);
-                info.WindowStyle = ProcessWindowStyle.Hidden;
-                Console.Write(".");
+				info.WindowStyle = ProcessWindowStyle.Hidden;
+				Console.Write (".");
 				using (Process exeProcess = Process.Start (info)) {
 					exeProcess.WaitForExit ();
 				}
@@ -26,9 +26,9 @@ namespace CSharpUML
 			try {
 				var info = new ProcessStartInfo (
   				  "convert", string.Join (" ", parameters)
-                );
-                info.WindowStyle = ProcessWindowStyle.Hidden;
-                Console.Write(".");
+				);
+				info.WindowStyle = ProcessWindowStyle.Hidden;
+				Console.Write (".");
 				using (Process exeProcess = Process.Start (info)) {
 					exeProcess.WaitForExit ();
 				}

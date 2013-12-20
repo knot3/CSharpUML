@@ -17,7 +17,7 @@ namespace CSharpUML
 
 		private string EscapeLines (string line, int lineLength)
 		{
-			string[] parts = line.Trim().Split (" ");
+			string[] parts = line.Trim ().Split (" ");
 			string escaped = "";
 			bool first = true;
 			int length = 0;

@@ -9,10 +9,10 @@ namespace CSharpUML
 	{
 		public static void WriteLines (string filename, IEnumerable<string> lines)
 		{
-			Directory.CreateDirectory(Path.GetDirectoryName(filename));
+			Directory.CreateDirectory (Path.GetDirectoryName (filename));
 			using (StreamWriter writer = new StreamWriter(filename)) {
 				foreach (string line in lines) {
-					writer.WriteLine(line);
+					writer.WriteLine (line);
 				}
 			}
 		}

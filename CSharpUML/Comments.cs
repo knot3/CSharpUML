@@ -65,37 +65,31 @@ namespace CSharpUML
 				yield break;
 		}
 
-        public static IEnumerable<string> PrintComments(string name, string padding)
-        {
-            if (HasComments(name))
-            {
-                // foreach (string key in CommentMap.Keys) { Console.WriteLine (key); }
-                // Console.WriteLine ("name:" + name);
-                foreach (string cmt in CommentMap[name])
-                {
-                    if (cmt.Length > 0)
-                        Console.WriteLine("Comment[" + name + "] = " + cmt);
-                    yield return padding + "// " + cmt;
-                }
-            }
-            else
-            {
-                yield return padding + "// ";
-            }
-        }
+		public static IEnumerable<string> PrintComments (string name, string padding)
+		{
+			if (HasComments (name)) {
+				// foreach (string key in CommentMap.Keys) { Console.WriteLine (key); }
+				// Console.WriteLine ("name:" + name);
+				foreach (string cmt in CommentMap[name]) {
+					if (cmt.Length > 0)
+						Console.WriteLine ("Comment[" + name + "] = " + cmt);
+					yield return padding + "// " + cmt;
+				}
+			} else {
+				yield return padding + "// ";
+			}
+		}
 
-        public static string GetCommentParameter(string key, string paramname)
-        {
-            foreach (string _cmt in CommentMap[key])
-            {
-                string cmt = _cmt.TrimAll();
-                if (cmt.StartsWith("[" + paramname) && cmt.EndsWith("]") && cmt.Contains("="))
-                {
-                    return cmt.Split("=")[1].Split("]")[0];
-                }
-            }
-            return "";
-        }
+		public static string GetCommentParameter (string key, string paramname)
+		{
+			foreach (string _cmt in CommentMap[key]) {
+				string cmt = _cmt.TrimAll ();
+				if (cmt.StartsWith ("[" + paramname) && cmt.EndsWith ("]") && cmt.Contains ("=")) {
+					return cmt.Split ("=") [1].Split ("]") [0];
+				}
+			}
+			return "";
+		}
 
 		public static IEnumerable<string> CSharpComments (string name, string padding)
 		{

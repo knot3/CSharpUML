@@ -196,7 +196,7 @@ namespace CSharpUML
 			lines.Add (
 				paddingStr + Publicity.ToCode ("", " ") + Virtuality.ToCode ("", " ") + type.ToCode ("", " ")
 				+ name
-				+ (bases.Length > 0 ? " : " + string.Join (", ", bases).Replace("XNA.", "") : "")
+				+ (bases.Length > 0 ? " : " + string.Join (", ", bases).Replace ("XNA.", "") : "")
 			);
 			lines.Add (paddingStr + "{");
 			lines.Add ("");
@@ -232,7 +232,7 @@ namespace CSharpUML
 				lines.Add (paddingStr + "    #region Methods");
 				lines.Add ("");
 				foreach (UmlMethod obj in methods) {
-                    lines.Add(obj.ToCSharpCode(padding + 4, Virtuality.Virtual, this));
+					lines.Add (obj.ToCSharpCode (padding + 4, Virtuality.Virtual, this));
 					lines.Add ("");
 				}
 				lines.Add (paddingStr + "    #endregion");
@@ -257,7 +257,7 @@ namespace CSharpUML
 
 			string typestr = type == ClassType.Interface ? "Schnittstelle" : "Klasse";
 			List<string> lines = new List<string> ();
-			lines.Add (@"\subsubsection{" + typestr + @" " + name + @"}\index{"+Packages.GetPackage(name)+"!"+name+"}");
+			lines.Add (@"\subsubsection{" + typestr + @" " + name + @"}\index{" + Packages.GetPackage (name) + "!" + name + "}");
 			
 			lines.Add (@"\begin{wrapfigure}{R}{9cm}{0}" + "\n" + @"\centering");
 			lines.Add (@"\includegraphics[scale=0.5]{Klassen/" + Name.Clean () + @"}");
@@ -265,10 +265,10 @@ namespace CSharpUML
 
 			lines.Add (@"\paragraph{Beschreibung:}\mbox{}\newline\newline");
 			foreach (string cmt in Comments.GetComments(commentsKey)) {
-                if (cmt.StartsWith("[") && cmt.EndsWith("]") && cmt.Contains("="))
-                    continue;
+				if (cmt.StartsWith ("[") && cmt.EndsWith ("]") && cmt.Contains ("="))
+					continue;
 
-                lines.Add(cmt);
+				lines.Add (cmt);
 			}
 			//lines.Add (@"\setlength{\columnsep}{10pt}%");
 			lines.Add ("\n");
@@ -276,7 +276,7 @@ namespace CSharpUML
 			IEnumerable<UmlMethod> contructors = Content.OfType<UmlMethod> ().Where ((m) => m.Name == Name);
 			IEnumerable<UmlMethod> methods = Content.OfType<UmlMethod> ().Where ((m) => m.Name != Name);
 			if (attributes.Count () > 0) {
-                lines.Add(@"\paragraph{Eigenschaften:}\mbox{} \newline\newline");
+				lines.Add (@"\paragraph{Eigenschaften:}\mbox{} \newline\newline");
 				bool first = true;
 				foreach (UmlAttribute obj in attributes) {
 					if (!first)
@@ -288,7 +288,7 @@ namespace CSharpUML
 			}
 			if (contructors.Count () > 0) {
 				// lines.Add (@"\paragraph{Konstruktoren:}\mbox{} \begin{description} ");
-                lines.Add(@"\paragraph{Konstruktoren:}\mbox{} \newline\newline");
+				lines.Add (@"\paragraph{Konstruktoren:}\mbox{} \newline\newline");
 				bool first = true;
 				foreach (UmlMethod obj in contructors) {
 					if (!first)
@@ -301,7 +301,7 @@ namespace CSharpUML
 			}
 			if (methods.Count () > 0) {
 				// lines.Add (@"\paragraph{Methoden:}\mbox{} \begin{description} ");
-                lines.Add(@"\paragraph{Methoden:}\mbox{} \newline\newline");
+				lines.Add (@"\paragraph{Methoden:}\mbox{} \newline\newline");
 				bool first = true;
 				foreach (UmlMethod obj in methods) {
 					if (!first)

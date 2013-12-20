@@ -25,7 +25,7 @@ namespace CSharpUML
 					tags.Add (new Tag (tagname: tagname, content: tagcontent));
 				}
 
-				matches = Regex.Matches (content, @"([<]" + tagname + @"[ >])([^>]*?"+"\""+@">.*?)([<]/" + tagname + @"[>])");
+				matches = Regex.Matches (content, @"([<]" + tagname + @"[ >])([^>]*?" + "\"" + @">.*?)([<]/" + tagname + @"[>])");
 				Console.WriteLine ("match: " + @"([<]" + tagname + @"[ >])(.*?)([<]/" + tagname + @"[>])");
 				Console.WriteLine ("matches: " + matches.Count);
 
@@ -44,10 +44,10 @@ namespace CSharpUML
 
 			string packagename = "";
 			if (content.Contains ("<package")) {
-				Tag[] packages = ExtractTags(ref content, "package");
+				Tag[] packages = ExtractTags (ref content, "package");
 				if (packages.Length > 0) {
-					packagename = packages[0].Name;
-					content = packages[0].Content;
+					packagename = packages [0].Name;
+					content = packages [0].Content;
 				}
 			}
 			
@@ -55,14 +55,14 @@ namespace CSharpUML
 			content = content.RegexReplace (@"[\r\n\s]+", " ");
 			content = content.RegexReplace ("\"........-....-....-....-............\"", "");
 
-			Tag[] junk = ExtractTags(ref content, "redefinableTemplateSignature");
+			Tag[] junk = ExtractTags (ref content, "redefinableTemplateSignature");
 
 			Tag[] classes = ExtractTags (ref content, "class", "Interface");
 
 			foreach (Tag _tag in classes) {
-                Tag tag = _tag;
+				Tag tag = _tag;
 				if (tag.Params.ContainsKey ("name")) {
-                    junk = ExtractTags(ref tag.Content, "appliedStereotypesInternal");
+					junk = ExtractTags (ref tag.Content, "appliedStereotypesInternal");
                     
 					Console.WriteLine ("Found " + tag.Tagname + ": " + tag.Params ["name"]);
 					Packages.CurrentPackage = packagename;

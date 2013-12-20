@@ -32,12 +32,12 @@ namespace CSharpUML
 		public string ToString (int padding)
 		{
 			string paddingStr = String.Concat (Enumerable.Repeat (" ", padding));
-			List<string> lines = new List<string>();
-			lines.Add(paddingStr + Name);
+			List<string> lines = new List<string> ();
+			lines.Add (paddingStr + Name);
 			foreach (T block in Content) {
-				lines.Add((block as Block<T>).ToString (padding + 4));
+				lines.Add ((block as Block<T>).ToString (padding + 4));
 			}
-			return string.Join("\n", lines);
+			return string.Join ("\n", lines);
 		}
 	}
 }

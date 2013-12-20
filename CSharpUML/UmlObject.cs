@@ -85,7 +85,7 @@ namespace CSharpUML
 			return String.Compare (name, y.Name);
 		}
 
-        public static string[] TexHeader = new string[] { };/*
+		public static string[] TexHeader = new string[] { };/*
 			@"\newcommand{\property}[1]{\texttt{#1}}" + "\n",
 			@"\newcommand{\method}[1]{\texttt{#1}}" + "\n",
 			@"\newcommand{\keyword}[1]{\textcolor{BlueViolet}{#1}}" + "\n",

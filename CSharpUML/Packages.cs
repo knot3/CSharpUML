@@ -23,30 +23,27 @@ namespace CSharpUML
 				AddToPackage (CurrentPackage, name);
 		}
 
-        public static bool IsInPackage(string package, string name)
-        {
-            List<string> list = PackageMap[package];
-            Console.WriteLine("package: " + package + " => " + string.Join(", ", list.ToArray()));
-            if (list.Contains(name))
-            {
-                return true;
-            }
-            return false;
-        }
+		public static bool IsInPackage (string package, string name)
+		{
+			List<string> list = PackageMap [package];
+			Console.WriteLine ("package: " + package + " => " + string.Join (", ", list.ToArray ()));
+			if (list.Contains (name)) {
+				return true;
+			}
+			return false;
+		}
 
-        public static bool IsInPackage(string name)
-        {
-            foreach (string package in PackageMap.Keys)
-            {
-                List<string> list = PackageMap[package];
-                Console.WriteLine("package: " + package + " => " + string.Join(", ", list.ToArray()));
-                if (list.Contains(name))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+		public static bool IsInPackage (string name)
+		{
+			foreach (string package in PackageMap.Keys) {
+				List<string> list = PackageMap [package];
+				Console.WriteLine ("package: " + package + " => " + string.Join (", ", list.ToArray ()));
+				if (list.Contains (name)) {
+					return true;
+				}
+			}
+			return false;
+		}
 
 		public static string GetPackage (string name)
 		{
