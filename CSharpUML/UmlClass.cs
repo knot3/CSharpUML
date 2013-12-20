@@ -196,7 +196,7 @@ namespace CSharpUML
 			lines.Add (
 				paddingStr + Publicity.ToCode ("", " ") + Virtuality.ToCode ("", " ") + type.ToCode ("", " ")
 				+ name
-				+ " : " + string.Join (", ", bases)
+				+ (bases.Length > 0 ? " : " + string.Join (", ", bases) : "")
 			);
 			lines.Add (paddingStr + "{");
 			lines.Add ("");
@@ -257,13 +257,13 @@ namespace CSharpUML
 
 			string typestr = type == ClassType.Interface ? "Schnittstelle" : "Klasse";
 			List<string> lines = new List<string> ();
-			lines.Add (@"\subsection{" + typestr + @" " + name + @"}");
+			lines.Add (@"\subsubsection{" + typestr + @" " + name + @"}\index{"+Packages.GetPackage(name)+"!"+name+"}");
 			
-			lines.Add (@"\begin{wrapfigure}{r}{9cm}" + "\n" + @"\centering");
+			lines.Add (@"\begin{wrapfigure}{r}{9cm}{0}" + "\n" + @"\centering");
 			lines.Add (@"\includegraphics[scale=0.5]{Klassen/" + Name.Clean () + @"}");
 			lines.Add (@"\end{wrapfigure}");
 
-			lines.Add (@"\paragraph{Beschreibung:}\mbox{}\\\\");
+			lines.Add (@"\paragraph{Beschreibung:}\mbox{}\newline\newline");
 			foreach (string cmt in Comments.GetComments(commentsKey)) {
 				lines.Add (cmt);
 			}
@@ -273,7 +273,7 @@ namespace CSharpUML
 			IEnumerable<UmlMethod> contructors = Content.OfType<UmlMethod> ().Where ((m) => m.Name == Name);
 			IEnumerable<UmlMethod> methods = Content.OfType<UmlMethod> ().Where ((m) => m.Name != Name);
 			if (attributes.Count () > 0) {
-				lines.Add (@"\paragraph{Eigenschaften:}\mbox{} \\\\");
+                lines.Add(@"\paragraph{Eigenschaften:}\mbox{} \newline\newline");
 				bool first = true;
 				foreach (UmlAttribute obj in attributes) {
 					if (!first)
@@ -285,7 +285,7 @@ namespace CSharpUML
 			}
 			if (contructors.Count () > 0) {
 				// lines.Add (@"\paragraph{Konstruktoren:}\mbox{} \begin{description} ");
-				lines.Add (@"\paragraph{Konstruktoren:}\mbox{} \\\\");
+                lines.Add(@"\paragraph{Konstruktoren:}\mbox{} \newline\newline");
 				bool first = true;
 				foreach (UmlMethod obj in contructors) {
 					if (!first)
@@ -298,7 +298,7 @@ namespace CSharpUML
 			}
 			if (methods.Count () > 0) {
 				// lines.Add (@"\paragraph{Methoden:}\mbox{} \begin{description} ");
-				lines.Add (@"\paragraph{Methoden:}\mbox{} \\\\");
+                lines.Add(@"\paragraph{Methoden:}\mbox{} \newline\newline");
 				bool first = true;
 				foreach (UmlMethod obj in methods) {
 					if (!first)

@@ -221,26 +221,36 @@ namespace CSharpUML
 			Console.WriteLine ("Write: " + target);
 			List<string> lines = new List<string> ();
 			lines.AddRange (UmlObject.TexHeader);
-			lines.Add (@"\section{Klassen}");
-			foreach (UmlClass obj in allObjects.OfType<UmlClass>()) {
-				if (obj.type != ClassType.Interface) {
-					lines.Add (obj.ToTexCode ());
-					lines.Add ("");
-				}
-			}
-			lines.Add (@"\section{Schnittstellen}");
-			foreach (UmlClass obj in allObjects.OfType<UmlClass>()) {
-				if (obj.type == ClassType.Interface) {
-					lines.Add (obj.ToTexCode ());
-					lines.Add ("");
-				}
-			}
-			lines.Add (@"\section{Enumerationen}");
-			foreach (UmlEnum obj in allObjects.OfType<UmlEnum>()) {
-				lines.Add (obj.ToTexCode ());
-				lines.Add ("");
-			}
-			Files.WriteLines (target, lines);
+			foreach (string package in Packages.PackageMap.Keys)
+            {
+                lines.Add (@"\section{Package "+package+@"}");
+                
+                lines.Add (@"\subsection{Klassen}");
+                foreach (UmlClass obj in allObjects.OfType<UmlClass>().Where((c) => Packages.IsInPackage(package, c.Name)))
+                {
+                    if (obj.type != ClassType.Interface)
+                    {
+                        lines.Add(obj.ToTexCode());
+                        lines.Add("");
+                    }
+                }
+                lines.Add (@"\subsection{Schnittstellen}");
+                foreach (UmlClass obj in allObjects.OfType<UmlClass>().Where((c) => Packages.IsInPackage(package, c.Name)))
+                {
+				    if (obj.type == ClassType.Interface) {
+					    lines.Add (obj.ToTexCode ());
+					    lines.Add ("");
+				    }
+			    }
+			    lines.Add (@"\subsection{Enumerationen}");
+                foreach (UmlEnum obj in allObjects.OfType<UmlEnum>().Where((c) => Packages.IsInPackage(package, c.Name)))
+                {
+				    lines.Add (obj.ToTexCode ());
+				    lines.Add ("");
+			    }
+			 }
+			
+            Files.WriteLines (target, lines);
 
 			foreach (UmlClass obj in allObjects.OfType<UmlClass>()) {
 				// write class diagram

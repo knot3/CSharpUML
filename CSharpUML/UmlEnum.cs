@@ -68,7 +68,7 @@ namespace CSharpUML
 		{
 			foreach (UmlBlock subblock in blocks) {
 				string literal = subblock.Name.TrimAll ();
-				Comments.AddTo (commentsKey = Comments.Key (literal), subblock.comments);
+				Comments.AddTo (commentsKey = Comments.Key (name, literal), subblock.comments);
 				yield return literal;
 			}
 		}
@@ -91,7 +91,7 @@ namespace CSharpUML
 			string nameWithPackage = Packages.IsInPackage (name) ? Packages.GetPackage (name) + "." + name : name;
 			lines.Add (paddingStr + Publicity.ToCode ("", " ") + Virtuality.ToCode ("", " ") + "enum " + nameWithPackage);
 			foreach (string literal in values) {
-				lines.AddRange (Comments.PrintComments (Comments.Key (literal), paddingStr + "    "));
+				lines.AddRange (Comments.PrintComments (Comments.Key (name, literal), paddingStr + "    "));
 				lines.Add (paddingStr + "    " + literal);
 			}
 			return string.Join ("\n", lines);
@@ -115,7 +115,7 @@ namespace CSharpUML
 			lines.Add (paddingStr + Publicity.ToCode ("", " ") + Virtuality.ToCode ("", " ") + "enum " + name);
 			lines.Add (paddingStr + "{");
 			foreach (string literal in values) {
-				lines.AddRange (Comments.CSharpComments (Comments.Key (literal), paddingStr + "    "));
+				lines.AddRange (Comments.CSharpComments (Comments.Key (name, literal), paddingStr + "    "));
 				lines.Add (paddingStr + "    " + literal + ",");
 			}
 			lines.Add (paddingStr + "}");
@@ -132,7 +132,7 @@ namespace CSharpUML
 		public override string ToTexCode ()
 		{
 			List<string> lines = new List<string> ();
-			lines.Add (@"\subsection{Enumeration " + name + @"}");
+			lines.Add (@"\subsubsection{Enumeration " + name + @"}");
 			lines.Add (@"\paragraph{Beschreibung:}\mbox{}\\\\");
 			foreach (string cmt in Comments.GetComments(commentsKey)) {
 				lines.Add (cmt);
@@ -148,7 +148,7 @@ namespace CSharpUML
 					literal = @"\ptype{" + literal + "}";
 				}
 				lines.Add (@"\textbf{" + literal + @"}\\~\\");
-				foreach (string cmt in Comments.GetComments(Comments.Key(_literal))) {
+				foreach (string cmt in Comments.GetComments(Comments.Key(name, _literal))) {
 					lines.Add (cmt);
 				}
 				lines.Add (@"~\\\\");

@@ -164,13 +164,36 @@ namespace CSharpUML
 			List<string> lines = new List<string> ();
 			lines.AddRange (Comments.CSharpComments (commentsKey, paddingStr));
 			string uml = paddingStr + Publicity.ToCode ("", " ") + virt.ToCode ("", " ")
-				+ (returntype.Length > 0 ? returntype : "void") + " "
-				+ name + " ("
-				+ string.Join (", ", parameters) + ")";
-			lines.Add (uml);
-			lines.Add (paddingStr + "{");
-			lines.Add (paddingStr + "    " + "throw new System.NotImplementedException();");
-			lines.Add (paddingStr + "}");
+				+ (IsContructor ? "" : returntype.Length > 0 ? returntype : "void") + " "
+                + name;
+            if (name == "this")
+            {
+                uml += " [" + string.Join(", ", parameters) + "]";
+                lines.Add(uml);
+                lines.Add(paddingStr + "{");
+                lines.Add(paddingStr + "    " + "get { throw new System.NotImplementedException(); }");
+                lines.Add(paddingStr + "    " + "set { throw new System.NotImplementedException(); }");
+                lines.Add(paddingStr + "}");
+            }
+            else
+            {
+                uml += " (";
+                for (int i = 0; i < parameters.Length; ++i)
+                {
+                    if (i > 0)
+                        uml += ", ";
+                    if (parameters[i].Contains(" "))
+                        uml += parameters[i];
+
+                }
+                uml += ")";
+                if (uml.Contains("ModelFactory (GameModelInfo, GameModel>, Func<GameScreen createModel)"))
+                    uml = paddingStr + "public ModelFactory (Func<GameScreen, GameModelInfo, GameModel> createModel)";
+                lines.Add(uml);
+                lines.Add(paddingStr + "{");
+                lines.Add(paddingStr + "    " + "throw new System.NotImplementedException();");
+                lines.Add(paddingStr + "}");
+            }
 			return string.Join ("\n", lines);
 		}
 
@@ -178,7 +201,7 @@ namespace CSharpUML
 		{
 			List<string> lines = new List<string> ();
 			string uml = Publicity.ToCode (@"\keyword{", "} ").Replace ("public ", "")
-				+ Virtuality.ToCode (@"\keyword{", "} ").Replace ("public ", "")
+				+ Virtuality.ToCode (@"\keyword{", "} ")
 				+ (IsContructor ? "" : @"\ptype{" + returntype + @"} ")
 				+ @"\varname{" + name.ToTexCode () + "} (";
 			for (int i = 0; i < parameters.Length; ++i) {
@@ -187,13 +210,22 @@ namespace CSharpUML
 					uml += ", ";
 				if (parts.Length == 1)
 					uml += @"\ptype{" + parts [0] + @"}";
-				else if (parts.Length > 1)
-					uml += @"\ptype{" + parts [0] + @"} \varname{" + parts [1].ToTexCode () + "}";
+                else if (parts.Length > 1)
+                    uml += @"\ptype{" + parts[0] + @"} \varname{" + parts[1].ToTexCode() + "}";
 			}
 			uml += ")" + Virtuality.ToCode (" ", "");
 			// lines.Add (@"\item[" + uml + @"] \item[]");
-			lines.Add (@"\textbf{" + uml + @"}\\~\\");
-			foreach (string cmt in Comments.GetComments(commentsKey)) {
+            lines.Add(@"\textbf{" + uml + @"}\newline\newline");
+			foreach (string _cmt in Comments.GetComments(commentsKey)) {
+                string cmt = _cmt;
+                for (int i = 0; i < parameters.Length; ++i)
+                {
+                    string[] parts = parameters[i].Split(new char[] { ' ' }, 2, StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length > 1)
+                    {
+                        cmt = cmt.Replace(parts[1], @"\param{"+parts[1]+@"}");
+                    }
+                }
 				lines.Add (cmt);
 			}
 			return string.Join ("\n", lines);

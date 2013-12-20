@@ -59,8 +59,11 @@ namespace CSharpUML
 
 			Tag[] classes = ExtractTags (ref content, "class", "Interface");
 
-			foreach (Tag tag in classes) {
+			foreach (Tag _tag in classes) {
+                Tag tag = _tag;
 				if (tag.Params.ContainsKey ("name")) {
+                    junk = ExtractTags(ref tag.Content, "appliedStereotypesInternal");
+                    
 					Console.WriteLine ("Found " + tag.Tagname + ": " + tag.Params ["name"]);
 					Packages.CurrentPackage = packagename;
 					yield return new UmlClass (tag);
