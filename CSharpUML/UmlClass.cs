@@ -259,11 +259,18 @@ namespace CSharpUML
 
 			string typestr = type == ClassType.Interface ? "Schnittstelle" : "Klasse";
 			List<string> lines = new List<string> ();
-			lines.Add (@"\subsubsection{" + typestr + @" " + name + @"}\index{" + Packages.GetPackage (name) + "!" + name + "}");
+			lines.Add (@"\subsubsection{" + typestr + @" " + name + @"}\index{" + Packages.GetPackage (name) + "!" + name + @"}\label{"+name+"}");
 			
-			lines.Add (@"\begin{wrapfigure}{R}{9cm}{0}" + "\n" + @"\centering");
-			lines.Add (@"\includegraphics[scale=0.5]{Klassen/" + Name.Clean () + @"}");
-			lines.Add (@"\end{wrapfigure}");
+            // wrapfigure
+			//lines.Add (@"\begin{wrapfigure}{R}{9cm}{0}" + "\n" + @"\centering");
+            //lines.Add (@"\includegraphics[scale=0.5]{Klassen/" + Name.Clean () + @"}");
+            //lines.Add (@"\end{wrapfigure}");
+
+            // in der mitte
+            lines.Add(@"\begin{figure}[h!]" + "\n" + @"\centering");
+            lines.Add(@"\includegraphics[scale=0.5]{Klassen/" + Name.Clean() + @"}");
+            lines.Add(@"\end{figure}");
+
 
 			lines.Add (@"\paragraph{Beschreibung:}\mbox{}\newline\newline");
 			foreach (string cmt in Comments.GetComments(commentsKey)) {
