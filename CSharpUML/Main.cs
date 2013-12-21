@@ -222,7 +222,7 @@ namespace CSharpUML
 			List<string> lines = new List<string> ();
 			lines.AddRange (UmlObject.TexHeader);
 			foreach (string package in Packages.PackageMap.Keys) {
-				lines.Add (@"\section{Package " + package + @"}");
+				lines.Add (@"\section{Paket " + package + @"}");
                 
 				lines.Add (@"\subsection{Klassen}");
 				foreach (UmlClass obj in allObjects.OfType<UmlClass>().Where((c) => Packages.IsInPackage(package, c.Name))) {
