@@ -178,11 +178,11 @@ namespace CSharpUML
 			// return type
 			string _returntype = Comments.GetCommentParameter (commentsKey, "returntype");
 			if (_returntype != null)
-				uml += _returntype.ToSharpType () + " ";
+				uml += _returntype.ToCSharpType () + " ";
 			else if (IsContructor)
 				uml += "";
 			else if (returntype.Length > 0)
-				uml += returntype.ToSharpType ().ToCode ("", " ");
+				uml += returntype.ToCSharpType ().ToCode ("", " ");
 			else
 				uml += "void ";
 
@@ -214,9 +214,9 @@ namespace CSharpUML
 							uml += ", ";
 						if (parameters [i].Contains (" ")) {
 							String[] p = parameters [i].Split (new char[] { ' ' }, 2);
-							uml += p [0].ToSharpType () + " " + p [1];
+							uml += p [0].ToCSharpType () + " " + p [1];
 						} else
-							uml += parameters [i].ToSharpType () + " " + parameters [i].ToLower ();
+							uml += parameters [i].ToCSharpType () + " " + parameters [i].ToLower ();
 					}
 				}
 				uml += ")";

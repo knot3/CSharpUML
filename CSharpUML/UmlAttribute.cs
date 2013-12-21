@@ -116,7 +116,7 @@ namespace CSharpUML
 				+ ((inClass != null && inClass.type == ClassType.Interface)
                 ? ""
                 : Publicity.ToCode ("", " ") + Virtuality.ToCode ("", " "));
-			uml += type.ToSharpType () + " " + name + " { get; set; }";
+			uml += type.ToCSharpType () + " " + name + " { get; set; }";
 			lines.Add (uml);
 			return string.Join ("\n", lines);
 		}

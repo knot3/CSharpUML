@@ -17,7 +17,7 @@ namespace CSharpUML
 			return s.Trim (' ', '\r', '\n', '\t');
 		}
 
-		public static string ToSharpType (this string s)
+		public static string ToCSharpType (this string s)
 		{
 			return s.Replace ("Integer", "int").Replace ("String", "string")
                 .Replace ("XNA.", "");

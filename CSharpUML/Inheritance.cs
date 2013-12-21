@@ -32,7 +32,8 @@ namespace CSharpUML
 			foreach (IUmlObject obj in objects) {
 				if (obj is UmlClass) {
 					UmlClass cl = obj as UmlClass;
-					foreach (string basename in cl.bases) {
+					foreach (string _basename in cl.bases) {
+						string basename = _basename.ToCSharpType ();
 						// Console.WriteLine("basename="+basename);
 						IUmlObject baseobj;
 						if (names.ContainsKey (basename.Clean ().ToLower ())) {
