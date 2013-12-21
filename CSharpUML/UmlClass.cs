@@ -268,7 +268,7 @@ namespace CSharpUML
 
             // in der mitte
             lines.Add(@"\begin{figure}[h!]" + "\n" + @"\centering");
-            lines.Add(@"\includegraphics[scale=0.5]{Klassen/" + Name.Clean() + @"}");
+            lines.Add(@"\includegraphics[scale=1]{Klassen/" + Name.Clean() + @"}");
             lines.Add(@"\end{figure}");
 
 

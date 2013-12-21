@@ -187,7 +187,7 @@ namespace CSharpUML
 							path += "/../";
 						Console.WriteLine (path);
 						Action<string> processFile = (filename) => {
-							if (filename.Contains ("ModelDefinition") && !filename.Contains("ModelingProject1.uml")) {
+							if (filename.Contains ("ModelDefinition") && !filename.Contains ("ModelingProject1.uml")) {
 								Console.WriteLine ("Read: " + filename);
 								IParser parser = new VSParser ();
 								objects.AddRange (parser.Parse (filename));
@@ -258,17 +258,16 @@ namespace CSharpUML
 			newCommand (ref lines, "CountEnums", "" + allObjects.OfType<UmlEnum> ()
                 .Count ()
 			);
-            newCommand(ref lines, "CountAll", ""
-                + (allObjects.OfType<UmlClass>()
-                .Where((o) => o.type == ClassType.Class).Count()
-                + allObjects.OfType<UmlClass>()
-                .Where((o) => o.type == ClassType.Interface).Count()
-                + allObjects.OfType<UmlEnum>() /* Strukturen? */
-                .Count())
-            );
+			newCommand (ref lines, "CountAll", ""
+				+ (allObjects.OfType<UmlClass> ()
+                .Where ((o) => o.type == ClassType.Class).Count ()
+				+ allObjects.OfType<UmlClass> ()
+                .Where ((o) => o.type == ClassType.Interface).Count ()
+				+ allObjects.OfType<UmlEnum> () /* Strukturen? */
+                .Count ())
+			);
 
 			Files.WriteLines (Path.GetDirectoryName (target) + "/Definitionen.gentex", lines);
-
 
 			if (IsRunningOnMono ()) {
 				foreach (UmlClass obj in allObjects.OfType<UmlClass>()) {
@@ -280,7 +279,9 @@ namespace CSharpUML
 					//GraphViz.Dot ("jpg", filename + ".dot", filename + ".jpg");
 					//GraphViz.Dot ("png", filename + ".dot", filename + ".png");
 					GraphViz.Dot ("svg", filename + ".dot", filename + ".svg");
-					GraphViz.Convert ("-density 100", "svg:" + filename + ".svg", filename + ".png");
+					//GraphViz.Convert ("-density 100", "svg:" + filename + ".svg", filename + ".png");
+					//GraphViz.RsvgConvert ("--dpi-x 120", "--dpi-y 120", filename + ".svg", ">", filename + ".png");
+					GraphViz.InkScape ("--export-png=" + filename + ".png", "--export-dpi=150", filename + ".svg");
 				}
 			}
 		}
