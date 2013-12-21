@@ -179,8 +179,12 @@ namespace CSharpUML
 			string _returntype = Comments.GetCommentParameter (commentsKey, "returntype");
 			if (_returntype != null)
 				uml += _returntype.ToSharpType () + " ";
+			else if (IsContructor)
+				uml += "";
+			else if (returntype.Length > 0)
+				uml += returntype.ToSharpType ().ToCode ("", " ");
 			else
-				uml += (IsContructor ? "" : returntype.Length > 0 ? returntype.ToSharpType () : "void").ToCode ("", " ");
+				uml += "void ";
 
 			// name
 			string _name = Comments.GetCommentParameter (commentsKey, "name");
@@ -219,6 +223,10 @@ namespace CSharpUML
 				if (uml.Contains ("ModelFactory") && uml.Contains ("Func<"))
 					uml = paddingStr + "public ModelFactory (Func<GameScreen, GameModelInfo, GameModel> createModel)";
 
+				string _base = Comments.GetCommentParameter (commentsKey, "base");
+				if (_base != null)
+					uml += "\n" + paddingStr + "    : base(" + _base.TrimAll () + ")";
+			
 				if (inClass.type == ClassType.Interface) {
 					lines.Add (uml + ";");
 				} else {

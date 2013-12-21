@@ -138,7 +138,7 @@ namespace CSharpUML
 					string key = _key.ToLower ();
 					if (key.StartsWith ("is"))
 						key = key.Substring (2);
-					TrueParams.Add (key);
+					TrueParams.Add (key.ToLower ());
 				}
 			}
 		}

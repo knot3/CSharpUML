@@ -187,7 +187,7 @@ namespace CSharpUML
 							path += "/../";
 						Console.WriteLine (path);
 						Action<string> processFile = (filename) => {
-							if (filename.Contains ("ModelDefinition")) {
+							if (filename.Contains ("ModelDefinition") && !filename.Contains("ModelingProject1.uml")) {
 								Console.WriteLine ("Read: " + filename);
 								IParser parser = new VSParser ();
 								objects.AddRange (parser.Parse (filename));

@@ -36,6 +36,8 @@ namespace CSharpUML
 				else if (tag.Params ["visibility"].ToLower () == "protected")
 					Publicity = Publicity.Protected;
 			}
+			if (tag.TrueParams.Contains("static"))
+				Virtuality = CSharpUML.Virtuality.Static;
 		}
 
 		private UmlObject (string _name)
