@@ -259,12 +259,12 @@ namespace CSharpUML
                 .Count ()
 			);
             newCommand(ref lines, "CountAll", ""
-                + allObjects.OfType<UmlClass>()
+                + (allObjects.OfType<UmlClass>()
                 .Where((o) => o.type == ClassType.Class).Count()
                 + allObjects.OfType<UmlClass>()
                 .Where((o) => o.type == ClassType.Interface).Count()
                 + allObjects.OfType<UmlEnum>() /* Strukturen? */
-                .Count()
+                .Count())
             );
 
 			Files.WriteLines (Path.GetDirectoryName (target) + "/Definitionen.gentex", lines);
