@@ -135,7 +135,7 @@ namespace CSharpUML
 			lines.Add (@"\subsubsection{Enumeration " + name + @"}");
 			lines.Add (@"\paragraph{Beschreibung:}\mbox{}\newline\newline");
 			foreach (string cmt in Comments.GetComments(commentsKey)) {
-				lines.Add (cmt);
+				lines.Add (Packages.AddTexCommands (cmt));
 			}
 			lines.Add ("\n");
 			lines.Add (@"\paragraph{Eigenschaften:}\mbox{} \newline\newline");

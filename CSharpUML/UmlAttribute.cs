@@ -130,9 +130,9 @@ namespace CSharpUML
 			//lines.Add (@"\item[" + uml + @"] \item[]");
 			lines.Add (@"{\textbf{" + uml + @"}\newline\newline");
 			foreach (string cmt in Comments.GetComments(commentsKey)) {
-                if (cmt.StartsWith("[") && cmt.EndsWith("]") && cmt.Contains("="))
-                    continue;
-                lines.Add(cmt); // + @"\\");
+				if (cmt.StartsWith ("[") && cmt.EndsWith ("]") && cmt.Contains ("="))
+					continue;
+				lines.Add (Packages.AddTexCommands (cmt));
 			}
 			return string.Join ("\n", lines);
 		}

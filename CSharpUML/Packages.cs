@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace CSharpUML
 {
@@ -54,6 +55,20 @@ namespace CSharpUML
 				}
 			}
 			return "";
+		}
+
+		public static string AddTexCommands (string comment)
+		{
+			foreach (string package in PackageMap.Keys) {
+				foreach (string classname in PackageMap[package]) {
+					Regex rgx = new Regex (@"([^a-zA-Z0-9])(" + classname.Clean () + @")([^a-zA-Z0-9])");
+					if (classname.StartsWith ("I"))
+						comment = rgx.Replace (comment, @"$1\interface{$2}$3");
+					else
+						comment = rgx.Replace (comment, @"$1\class{$2}$3");
+				}
+			}
+			return comment;
 		}
 
 		public static void SplitName (string fullname, out string package, out string name)

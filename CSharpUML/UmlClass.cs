@@ -82,7 +82,7 @@ namespace CSharpUML
 				_bases.Add (baseclass.ParseType ());
 			}
 			Tag[] baseinterfaces = VSParser.ExtractTags (ref classtag.Content, "interfaceRealization");
-				Console.WriteLine ("interfaceRealization: " + name + ": " + classtag.Content);
+			Console.WriteLine ("interfaceRealization: " + name + ": " + classtag.Content);
 			foreach (Tag baseinterface in baseinterfaces) {
 				Console.WriteLine ("interfaceRealization: " + name + " <- " + baseinterface.Content);
 				_bases.Add (baseinterface.ParseType ());
@@ -259,17 +259,17 @@ namespace CSharpUML
 
 			string typestr = type == ClassType.Interface ? "Schnittstelle" : "Klasse";
 			List<string> lines = new List<string> ();
-			lines.Add (@"\subsubsection{" + typestr + @" " + name + @"}\index{" + Packages.GetPackage (name) + "!" + name + @"}\label{"+name+"}");
+			lines.Add (@"\subsubsection{" + typestr + @" " + name + @"}\index{" + Packages.GetPackage (name) + "!" + name + @"}\label{" + name + "}");
 			
-            // wrapfigure
+			// wrapfigure
 			//lines.Add (@"\begin{wrapfigure}{R}{9cm}{0}" + "\n" + @"\centering");
-            //lines.Add (@"\includegraphics[scale=0.5]{Klassen/" + Name.Clean () + @"}");
-            //lines.Add (@"\end{wrapfigure}");
+			//lines.Add (@"\includegraphics[scale=0.5]{Klassen/" + Name.Clean () + @"}");
+			//lines.Add (@"\end{wrapfigure}");
 
-            // in der mitte
-            lines.Add(@"\begin{figure}[h!]" + "\n" + @"\centering");
-            lines.Add(@"\includegraphics[scale=1]{Klassen/" + Name.Clean() + @"}");
-            lines.Add(@"\end{figure}");
+			// in der mitte
+			lines.Add (@"\begin{figure}[h!]" + "\n" + @"\centering");
+			lines.Add (@"\includegraphics[scale=1]{Klassen/" + Name.Clean () + @"}");
+			lines.Add (@"\end{figure}");
 
 
 			lines.Add (@"\paragraph{Beschreibung:}\mbox{}\newline\newline");
@@ -277,7 +277,7 @@ namespace CSharpUML
 				if (cmt.StartsWith ("[") && cmt.EndsWith ("]") && cmt.Contains ("="))
 					continue;
 
-				lines.Add (cmt);
+				lines.Add (Packages.AddTexCommands (cmt));
 			}
 			//lines.Add (@"\setlength{\columnsep}{10pt}%");
 			lines.Add ("\n");

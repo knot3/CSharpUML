@@ -259,16 +259,16 @@ namespace CSharpUML
 			// lines.Add (@"\item[" + uml + @"] \item[]");
 			lines.Add (@"\textbf{" + uml + @"}\newline\newline");
 			foreach (string _cmt in Comments.GetComments(commentsKey)) {
-                string cmt = _cmt;
-                if (cmt.StartsWith("[") && cmt.EndsWith("]") && cmt.Contains("="))
-                    continue;
-                for (int i = 0; i < parameters.Length; ++i)
-                {
+				string cmt = _cmt;
+				if (cmt.StartsWith ("[") && cmt.EndsWith ("]") && cmt.Contains ("="))
+					continue;
+				for (int i = 0; i < parameters.Length; ++i) {
 					string[] parts = parameters [i].Split (new char[] { ' ' }, 2, StringSplitOptions.RemoveEmptyEntries);
 					if (parts.Length > 1) {
 						cmt = cmt.Replace (parts [1], @"\param{" + parts [1] + @"}");
 					}
 				}
+				cmt = Packages.AddTexCommands (cmt);
 				lines.Add (cmt);
 			}
 			return string.Join ("\n", lines);
