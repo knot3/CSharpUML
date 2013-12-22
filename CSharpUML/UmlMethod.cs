@@ -255,7 +255,7 @@ namespace CSharpUML
 				else if (parts.Length > 1)
 					uml += @"\ptype{" + parts [0] + @"} \varname{" + parts [1].ToTexCode () + "}";
 			}
-			uml += ")" + Virtuality.ToCode (" ", "");
+			uml += ")";
 			// lines.Add (@"\item[" + uml + @"] \item[]");
 			lines.Add (@"\textbf{" + uml + @"}\newline\newline");
 			foreach (string _cmt in Comments.GetComments(commentsKey)) {
