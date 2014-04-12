@@ -1,0 +1,16 @@
+notifications:
+  slack: knot3:bsZjAIfIGf9T5WqUdCUcUsgh
+  email:
+    recipients:
+    - pascal.knodel@student.kit.edu
+    - tobias.schulz186@gmail.com
+    - daniel.warzel@student.kit.edu
+    - gerd.augsburg@student.kit.edu
+    - uahih@student.kit.edu
+    on_success: always
+    on_failure: always
+language: c
+script:
+- sudo apt-get -qq -y install mono-devel mono-dmcs nunit-console libopenal1
+- xbuild CSharpUML-Linux.sln
+
